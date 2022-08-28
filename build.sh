@@ -37,7 +37,8 @@ fi
 
 case $KERNEL_VERSION in
 	# latest working 5.10 commit: 38577b2007cb6cbe54b2dfb4b4f38db77471426f
-    "1"|"chromeos-5.10")     KERNEL_VERSION="release-R101-14588.B-chromeos-5.10"                          ;;
+    #"1"|"chromeos-5.10")     KERNEL_VERSION="release-R101-14588.B-chromeos-5.10"
+    "1"|"chromeos-5.10")     KERNEL_VERSION="release-R106-15054.B-chromeos-5.10"     ;;
     "2"|"alt-chromeos-5.10") KERNEL_VERSION="release-R86-13421.B-chromeos-5.4"       ;;
     "3"|"chromeos-5.4")      KERNEL_VERSION="release-R101-14588.B-chromeos-5.4"      ;;
     "4"|"chromeos-4.19")     KERNEL_VERSION="release-R101-14588.B-chromeos-4.19"     ;;
