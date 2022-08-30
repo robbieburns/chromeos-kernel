@@ -19,8 +19,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v3
         with:
-          submodules: true
-          fetch-depth: 2
+          fetch-depth: 1
           
       - name: Generating release tag and setting prerelease
         id: tag
