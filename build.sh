@@ -7,6 +7,9 @@ sudo apt install -y netpbm imagemagick git build-essential ncurses-dev xz-utils 
 # Exit on errors
 set -e
 
+# verify dir is correct
+echo "$PWD"
+
 # If no kernel version in args
 if [[ $# -eq 0 ]]; then
     echo "What kernel version would you like? (choose a number 1-3)"
