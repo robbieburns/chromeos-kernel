@@ -33,7 +33,7 @@ case $KERNEL_VERSION in
     "4"|"chromeos-4.19")     KERNEL_VERSION="release-R101-14588.B-chromeos-4.19"     ;;
     "5"|"chromeos-4.14")     KERNEL_VERSION="release-R101-14588.B-chromeos-4.14"     ;;
     "6"|"chromeos-4.4")      KERNEL_VERSION="release-R101-14588.B-chromeos-4.4"      ;;
-    "7"|"chromeos-5.15")     KERNEL_VERSION="chromeos-5.15"                          ;;
+    "7"|"chromeos-5.15")     KERNEL_VERSION="release-R106-15054.B-chromeos-5.15"     ;;
     *) printerr "Please supply a valid kernel version"; exit ;;
 esac
 
@@ -99,9 +99,10 @@ else
     VMLINUZ="bzImage"
     SYSTEM_MAP="System.map-breath"
     CONFIG="config-breath"
+    echo "Executing strange command"
     [[ -f .config ]] || cp ../kernel.conf .config || exit
 fi
-
+echo "Making olddeconfig"
 make olddefconfig
 
 # If the terminal is interactive and not running in docker
