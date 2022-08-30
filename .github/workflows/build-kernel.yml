@@ -37,7 +37,7 @@ jobs:
       - name: Preparing Changelog        
         run: |
           echo 'CHNGLG<<EOF' >> $GITHUB_ENV
-          cat /home/runner/work/eupnea/eupnea/changelog.txt >> $GITHUB_ENV
+          cat changelog.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       
       - name: Building the standard Kernel
