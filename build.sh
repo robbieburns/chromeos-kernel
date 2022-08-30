@@ -9,6 +9,7 @@ set -e
 
 # verify dir is correct
 echo "$PWD"
+echo $(ls)
 
 # If no kernel version in args
 if [[ $# -eq 0 ]]; then
