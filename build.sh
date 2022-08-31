@@ -7,10 +7,6 @@ sudo apt install -y netpbm imagemagick git build-essential ncurses-dev xz-utils 
 # Exit on errors
 set -e
 
-# verify dir is correct
-echo "$PWD"
-echo $(ls)
-
 # If no kernel version in args
 if [[ $# -eq 0 ]]; then
     echo "What kernel version would you like? (choose a number 1-3)"
@@ -95,15 +91,14 @@ echo "Copying and updating kernel config"
 if [[ $KERNEL_VERSION == "alt-chromeos-5.10" ]]; then
     MODULES="modules.alt.tar.xz"
     VMLINUZ="bzImage.alt"
-    SYSTEM_MAP="System.map-breath-alt"
-    CONFIG="config-breath-alt"
+    SYSTEM_MAP="System.map-eupnea-alt"
+    CONFIG="config-eupnea-alt"
     [[ -f .config ]] || cp ../kernel.alt.conf .config || exit
 else
     MODULES="modules.tar.xz"
     VMLINUZ="bzImage"
-    SYSTEM_MAP="System.map-breath"
-    CONFIG="config-breath"
-    echo "Executing strange command"
+    SYSTEM_MAP="System.map-eupnea"
+    CONFIG="config-eupnea"
     [[ -f .config ]] || cp ../kernel.conf .config || exit
 fi
 echo "Making olddeconfig"
@@ -156,7 +151,10 @@ chmod +x fastxz
 tar -cvI './fastxz' -f ../$MODULES lib/
 echo "modules.tar.xz created!"
 
-# Copy the vmlinuz, system.map, and kernel config to the kernel directory
+# Copy the vmlinuz, system.map, and kernel config to the root directory
+cd ..
+cp System.map ../$SYSTEM_MAP
+cp .config ../$CONFIG
 
 echo "Command to extract modules to USB:"
 echo "sudo rm -rf /mnt/lib/modules/* && sudo cp -Rv kernel/mod/lib/modules/* /mnt/lib/modules && sync"
