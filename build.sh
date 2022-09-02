@@ -151,6 +151,11 @@ chmod +x fastxz
 tar -cvI './fastxz' -f ../$MODULES lib/
 echo "modules.tar.xz created!"
 
+# Verify current path and files
+echo "$PWD"
+echo $(sudo ls -a)
+echo $(sudo ls -a ../)
+
 # Copy the vmlinuz, system.map, and kernel config to the root directory
 cd ..
 cp System.map ../$SYSTEM_MAP
