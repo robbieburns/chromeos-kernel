@@ -1,11 +1,10 @@
-name: Build experiemental kernel
+name: Build experimental kernel
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
+  workflow_run:
+    workflows: [ "main" ]
 
 jobs:
-  main:
+  exp:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
     steps:
@@ -15,36 +14,20 @@ jobs:
           root-reserve-mb: 512
           swap-size-mb: 1024
           remove-dotnet: 'true'
-          
-      - name: Check out repository code
+
+      - name: Checking out repository code
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
-      - name: Building the experiemental kernel
+      - name: Building the experimental kernel
         run: bash build.sh chromeos-5.15
-      
-      - name: Deleting old exp release
-        if: "contains(github.event.head_commit.message, 'dev')"
-        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+
+      - name: Uploading to ci-storage
+        uses: actions/upload-artifact@v2
         with:
-          delete_release: true
-          tag_name: exp-build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Creating new release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: exp-build
-          name: Experiemental build - ${{ github.event.head_commit.message }}
-          prerelease: true
-          body: |
-            Experiemental 5.15 ChromeOS release
-            
-            Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
-          files: |
-            bzImage*
-            modules*
-            System.map-eupnea*
-            config-eupnea*
+          name: exp-kernel
+          retention-days: 1
+          path: |
+            bzImage.exp
+            modules.exp.tar.xz
