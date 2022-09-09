@@ -43,7 +43,7 @@ jobs:
         uses: lewagon/wait-on-check-action@master
         with:
           ref: ${{ github.sha }}
-          check-name: 'stable'
+          check-name: stable
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
 
@@ -51,7 +51,7 @@ jobs:
         uses: lewagon/wait-on-check-action@master
         with:
           ref: ${{ github.sha }}
-          check-name: 'alt'
+          check-name: alt
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
 
@@ -59,7 +59,7 @@ jobs:
         uses: lewagon/wait-on-check-action@master
         with:
           ref: ${{ github.sha }}
-          check-name: 'exp'
+          check-name: exp
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
 
