@@ -1,4 +1,4 @@
-# Building the kernel
+# Building the chromeOS kernel
 Use the build.sh file
 
 ## Manually(not recommended)
