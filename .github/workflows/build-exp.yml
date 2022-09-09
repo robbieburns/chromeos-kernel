@@ -15,6 +15,9 @@ jobs:
           swap-size-mb: 1024
           remove-dotnet: 'true'
 
+      - name: Waiting for new commit
+        run: sleep 10
+
       - name: Checking out repository code
         uses: actions/checkout@v3
         with:
