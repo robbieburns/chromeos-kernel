@@ -79,7 +79,11 @@ jobs:
             ```
             Kernel Delivery System - Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
           files: |
-            bzImage*
-            modules*
-            System.map-breath*
-            config-breath*
+            bzImage
+            bzImage.alt
+            bzImage.exp
+            modules.tar.xz
+            modules.alt.tar.xz
+            modules.exp.tar.xz
+            System.map-breath
+            config-breath
