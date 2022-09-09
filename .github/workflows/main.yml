@@ -42,7 +42,7 @@ jobs:
       - name: Waiting for stable kernel to build
         uses: lewagon/wait-on-check-action@master
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           check-name: 'stable'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
@@ -50,7 +50,7 @@ jobs:
       - name: Waiting for alt kernel to build
         uses: lewagon/wait-on-check-action@master
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           check-name: 'alt'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
@@ -58,7 +58,7 @@ jobs:
       - name: Waiting for exp kernel to build
         uses: lewagon/wait-on-check-action@master
         with:
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
           check-name: 'exp'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           wait-interval: 10
