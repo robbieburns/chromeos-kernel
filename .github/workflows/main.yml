@@ -2,6 +2,7 @@ name: Main workflow thread
 on:
   push:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   prepare:
@@ -40,7 +41,7 @@ jobs:
           age: '2 seconds' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
 
   on_build:
-    needs: [stable, alt, exp] # wait for all builds to finish
+    needs: [ stable, alt, exp ] # wait for all builds to finish
     runs-on: ubuntu-latest
     steps:
       - name: Checking out repository code
