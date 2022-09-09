@@ -94,6 +94,12 @@ if [[ $KERNEL_VERSION == "alt-chromeos-5.10" ]]; then
     SYSTEM_MAP="System.map-eupnea-alt"
     CONFIG="config-eupnea-alt"
     [[ -f .config ]] || cp ../kernel.alt.conf .config || exit
+elif [[ $KERNEL_VERSION == "chromeos-5.15" ]]; then
+    MODULES="modules.exp.tar.xz"
+    VMLINUZ="bzImage.exp"
+    SYSTEM_MAP="System.map-eupnea-exp"
+    CONFIG="config-eupnea-exp"
+    [[ -f .config ]] || cp ../kernel.exp.conf .config || exit
 else
     MODULES="modules.tar.xz"
     VMLINUZ="bzImage"
@@ -151,13 +157,9 @@ chmod +x fastxz
 tar -cvI './fastxz' -f ../$MODULES lib/
 echo "modules.tar.xz created!"
 
-# Verify current path and files
-echo "$PWD"
-echo $(sudo ls -a)
-echo $(sudo ls -a ../)
-
-# Copy the vmlinuz, system.map, and kernel config to the root directory
+# Copy the vmlinuz, modules.tar, system.map, and kernel config to the root directory
 cd ..
+cp modules.tar.xz ../$MODULES
 cp System.map ../$SYSTEM_MAP
 cp .config ../$CONFIG
 
