@@ -77,7 +77,7 @@ jobs:
             ```
             ${{ env.CHNGLG }}
             ```
-            Kernel Delivery System - Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
+            Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
           files: |
             bzImage*
             modules*
