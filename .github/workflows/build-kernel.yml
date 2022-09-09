@@ -1,4 +1,4 @@
-name: Build kernel
+name: Build stable kernel
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
@@ -41,9 +41,6 @@ jobs:
       
       - name: Building the standard Kernel
         run: bash build.sh chromeos-5.10
-      
-      - name: Building the experiemental 5.15 Kernel
-        run: bash build.sh chromeos-5.15
           
       - name: Building the legacy SKL/KBL Kernel
         # We're not building the below for now because of Google's kernel clusterfuck
