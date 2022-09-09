@@ -39,8 +39,6 @@ jobs:
         with:
           age: '2 seconds' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
 
-      - name: Trigger build actions
-
   on_build:
     needs: [stable, alt, exp] # wait for all builds to finish
     runs-on: ubuntu-latest
