@@ -41,6 +41,9 @@ jobs:
       
       - name: Building the standard Kernel
         run: bash build.sh chromeos-5.10
+      
+      - name: Building the experiemental 5.15 Kernel
+        run: bash build.sh chromeos-5.15
           
       - name: Building the legacy SKL/KBL Kernel
         # We're not building the below for now because of Google's kernel clusterfuck
@@ -79,11 +82,7 @@ jobs:
             ```
             Kernel Delivery System - Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
           files: |
-            bzImage
-            bzImage.alt
-            bzImage.exp
-            modules.tar.xz
-            modules.alt.tar.xz
-            modules.exp.tar.xz
-            System.map-breath
-            config-breath
+            bzImage*
+            modules*
+            System.map-eupnea*
+            config-eupnea*
