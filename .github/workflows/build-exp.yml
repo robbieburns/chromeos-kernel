@@ -1,7 +1,9 @@
 name: Build experimental kernel
 on:
   workflow_run:
-    workflows: [ "main" ]
+    workflows:
+      - prepare
+  workflow_dispatch:
 
 jobs:
   exp:

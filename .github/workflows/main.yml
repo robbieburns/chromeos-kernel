@@ -4,7 +4,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  main:
+  prepare:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
     steps:
@@ -12,11 +12,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
-
-      - name: Purging old artifacts
-        uses: c-hive/gha-remove-artifacts@v1
-        with:
-          age: '2 seconds' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
 
       - name: Generating release tag and setting prerelease
         id: tag
@@ -39,29 +34,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Waiting for stable kernel to build
-        uses: lewagon/wait-on-check-action@master
+      - name: Purging old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
         with:
-          ref: ${{ github.sha }}
-          check-name: stable
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
+          age: '2 seconds' # '<number> <unit>', e.g. 5 days, 2 years, 90 seconds, parsed by Moment.js
 
-      - name: Waiting for alt kernel to build
-        uses: lewagon/wait-on-check-action@master
-        with:
-          ref: ${{ github.sha }}
-          check-name: alt
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
+      - name: Trigger build actions
 
-      - name: Waiting for exp kernel to build
-        uses: lewagon/wait-on-check-action@master
+  on_build:
+    needs: [stable, alt, exp] # wait for all builds to finish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out repository code
+        uses: actions/checkout@v3
         with:
-          ref: ${{ github.sha }}
-          check-name: exp
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
+          fetch-depth: 1
 
       - name: Creating new release
         uses: softprops/action-gh-release@v1
