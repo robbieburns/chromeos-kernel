@@ -35,8 +35,22 @@ jobs:
       - name: creating tmp folder
         run: mkdir /tmp/artifacts
 
-      - uses: actions/download-artifact@v3
+      - name: Downloading stable artifact
+        uses: actions/download-artifact@v3
         with:
+          name: stable-kernel
+          path: /tmp/artifacts
+
+      - name: Downloading alt artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: alt-kernel
+          path: /tmp/artifacts
+
+      - name: Downloading exp artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: exp-kernel
           path: /tmp/artifacts
 
       - name: Publishing new release

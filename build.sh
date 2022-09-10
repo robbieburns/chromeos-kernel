@@ -15,10 +15,7 @@ if [[ $# -eq 0 ]]; then
   printf "2: alt-chromeos-5.10:\n  (Kernel version that is up-to-date but is pinned to a commit that supports KBL/SKL devices which do not support SOF)\n"
   printf "3: chromeos-5.4:\n  (Often causes more issues despite being a commonly-used kernel in ChromeOS)\n"
   printf "Older kernels that may provide better support for specific boards:"
-  printf "4: chromeos-4.19:\n  (# Verify current path and files
-echo "$PWD"
-echo $(sudo ls -a)
-echo $(sudo ls -a ../)For testing purposes)\n"
+  printf "4: chromeos-4.19:\n  (For testing purposes)\n"
   printf "5: chromeos-4.14:\n  (For testing purposes)\n"
   printf "6: chromeos-4.4:\n  (For testing purposes; too old for Mesa3D and some other Linux userspace software)\n"
   printf "Newer kernels that are not widely used within ChromeOS devices:"
@@ -171,13 +168,18 @@ chmod +x fastxz
 tar -cvI './fastxz' -f ../$MODULES lib/
 echo "modules.tar.xz created!"
 
-# Print current path and files
-echo "$PWD"
-echo $(sudo ls -a)
-echo $(sudo ls -a ../)
-
 # Copy the vmlinuz, modules.tar, system.map, and kernel config to the root directory
 cd ..
+
+# Print current path and files
+echo "$MODULES"
+echo "$SYSTEM_MAP"
+echo "$CONFIG"
+
+echo "$PWD"
+sudo ls -a
+sudo ls -a ../
+
 cp modules.tar.xz ../$MODULES
 cp System.map ../$SYSTEM_MAP
 cp .config ../$CONFIG
