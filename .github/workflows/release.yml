@@ -1,8 +1,7 @@
 name: Publish
-
 on:
   workflow_run:
-    workflows: [ "stable", "alt", "exp" ]
+    workflows: [ "Build stable kernel", "Build alt kernel", "Build exp kernel" ]
     types:
       - completed
 

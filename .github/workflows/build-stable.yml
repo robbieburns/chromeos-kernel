@@ -2,13 +2,13 @@ name: Build stable kernel
 on:
   workflow_run:
     workflows:
-      - prepare
+      - "Preparing for build"
     types:
       - completed
   workflow_dispatch:
 
 jobs:
-  stable:
+  build:
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip-ci')"
     steps:
