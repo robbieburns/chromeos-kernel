@@ -1,0 +1,29 @@
+name: Preparing for build
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'skip-ci')"
+    steps:
+      - name: Checking out repository code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+
+      - name: Deleting old dev release
+        if: "contains(github.event.head_commit.message, 'dev')"
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          delete_release: true
+          tag_name: dev-build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Purging old artifacts
+        uses: c-hive/gha-remove-artifacts@v1
+        with:
+          age: '2 seconds' # purge all
