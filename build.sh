@@ -177,8 +177,8 @@ echo "$SYSTEM_MAP"
 echo "$CONFIG"
 
 echo "$PWD"
-sudo ls -a
-sudo ls -a ../
+echo $(sudo ls -a)
+sudo $(ls -a ../)
 
 cp modules.tar.xz ../$MODULES
 cp System.map ../$SYSTEM_MAP
