@@ -3,6 +3,9 @@ on:
   workflow_run:
     workflows:
       - prepare
+    types:
+      - completed
+  workflow_dispatch:
 
 jobs:
   stable:
