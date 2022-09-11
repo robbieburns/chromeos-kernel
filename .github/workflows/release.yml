@@ -36,7 +36,6 @@ jobs:
         run: mkdir /tmp/artifacts
 
       - name: Download stable artifact
-        id: download-artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build-stable.yml
@@ -45,7 +44,6 @@ jobs:
           path: /tmp/artifacts/
 
       - name: Download alt artifact
-        id: download-artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build-alt.yml
@@ -54,7 +52,6 @@ jobs:
           path: /tmp/artifacts/
 
       - name: Download exp artifact
-        id: download-artifact
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build-exp.yml
