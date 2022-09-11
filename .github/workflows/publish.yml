@@ -27,12 +27,6 @@ jobs:
             echo "::set-output name=release_type::false"
           fi
 
-      - name: Preparing Changelog
-        run: |
-          echo 'CHNGLG<<EOF' >> $GITHUB_ENV
-          cat changelog.txt >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
-
       - name: creating tmp folder
         run: mkdir /tmp/artifacts
 
@@ -69,7 +63,6 @@ jobs:
           body: |
             Changelog:
             ```
-            ${{ env.CHNGLG }}
             ```
             Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
           files: |
