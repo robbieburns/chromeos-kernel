@@ -26,13 +26,13 @@ else
 fi
 
 echo "Setting correct file names"
-if [[ $KERNEL_VERSION == "alt-chromeos-5.10" | "2" ]]; then
+if [[ $KERNEL_VERSION == "alt-chromeos-5.10" ]]; then
   MODULES="modules.alt.tar.xz"
   VMLINUZ="bzImage.alt"
   SYSTEM_MAP="System.map-eupnea-alt"
   CONFIG="config-eupnea-alt"
   [[ -f .config ]] || cp ../kernel.alt.conf .config || exit
-elif [[ $KERNEL_VERSION == "chromeos-5.15" | "7" ]]; then
+elif [[ $KERNEL_VERSION == "chromeos-5.15" ]]; then
   MODULES="modules.exp.tar.xz"
   VMLINUZ="bzImage.exp"
   SYSTEM_MAP="System.map-eupnea-exp"
