@@ -170,7 +170,7 @@ cd mod
 # so we're putting the arguments and the command in a script
 echo "xz -9 -T0" >fastxz
 chmod +x fastxz
-tar -cvI './fastxz' -f ../$MODULES lib/
+tar -cvI './fastxz' -f ../modules.tar.xz lib/
 echo "modules.tar.xz created!"
 
 # Copy the vmlinuz, modules.tar, system.map, and kernel config to the root directory
