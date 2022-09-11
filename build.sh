@@ -25,26 +25,7 @@ else
   export KERNEL_VERSION=$1
 fi
 
-echo "Setting correct file names"
-if [[ $KERNEL_VERSION == "alt-chromeos-5.10" ]]; then
-  MODULES="modules.alt.tar.xz"
-  VMLINUZ="bzImage.alt"
-  SYSTEM_MAP="System.map-eupnea-alt"
-  CONFIG="config-eupnea-alt"
-  [[ -f .config ]] || cp ../kernel.alt.conf .config || exit
-elif [[ $KERNEL_VERSION == "chromeos-5.15" ]]; then
-  MODULES="modules.exp.tar.xz"
-  VMLINUZ="bzImage.exp"
-  SYSTEM_MAP="System.map-eupnea-exp"
-  CONFIG="config-eupnea-exp"
-  [[ -f .config ]] || cp ../kernel.exp.conf .config || exit
-else
-  MODULES="modules.tar.xz"
-  VMLINUZ="bzImage"
-  SYSTEM_MAP="System.map-eupnea"
-  CONFIG="config-eupnea"
-  [[ -f .config ]] || cp ../kernel.conf .config || exit
-fi
+export KERNEL_NAME=$KERNEL_VERSION
 
 # Select correct release from Google
 case $KERNEL_VERSION in
@@ -117,6 +98,27 @@ echo "$(ls ../patches) applied"
 # Prevents a dirty kernel
 echo "mod" >>.gitignore
 touch .scmversion
+
+echo "Setting correct file names"
+if [[ $KERNEL_NAME == "alt-chromeos-5.10" ]]; then
+  MODULES="modules.alt.tar.xz"
+  VMLINUZ="bzImage.alt"
+  SYSTEM_MAP="System.map-eupnea-alt"
+  CONFIG="config-eupnea-alt"
+  [[ -f .config ]] || cp ../kernel.alt.conf .config || exit
+elif [[ $KERNEL_NAME == "chromeos-5.15" ]]; then
+  MODULES="modules.exp.tar.xz"
+  VMLINUZ="bzImage.exp"
+  SYSTEM_MAP="System.map-eupnea-exp"
+  CONFIG="config-eupnea-exp"
+  [[ -f .config ]] || cp ../kernel.exp.conf .config || exit
+else
+  MODULES="modules.tar.xz"
+  VMLINUZ="bzImage"
+  SYSTEM_MAP="System.map-eupnea"
+  CONFIG="config-eupnea"
+  [[ -f .config ]] || cp ../kernel.conf .config || exit
+fi
 
 echo "Making olddeconfig"
 make olddefconfig
