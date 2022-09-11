@@ -32,6 +32,7 @@ jobs:
 
       - name: Download stable artifact
         uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
         with:
           workflow: build-stable.yml
           workflow_conclusion: completed
@@ -40,6 +41,7 @@ jobs:
 
       - name: Download alt artifact
         uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
         with:
           workflow: build-alt.yml
           workflow_conclusion: completed
@@ -48,6 +50,7 @@ jobs:
 
       - name: Download exp artifact
         uses: dawidd6/action-download-artifact@v2
+        continue-on-error: true
         with:
           workflow: build-exp.yml
           workflow_conclusion: completed
