@@ -111,7 +111,9 @@ elif [[ $KERNEL_NAME == "chromeos-5.15" ]]; then
   VMLINUZ="bzImage.exp"
   SYSTEM_MAP="System.map-eupnea-exp"
   CONFIG="config-eupnea-exp"
-  [[ -f .config ]] || cp ../kernel.exp.conf .config || exit
+  #[[ -f .config ]] || cp ../kernel.exp.conf .config || exit
+  # using defautl kernel.conf for now
+  [[ -f .config ]] || cp ../kernel.conf .config || exit
 else
   MODULES="modules.tar.xz"
   VMLINUZ="bzImage"
