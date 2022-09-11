@@ -29,7 +29,7 @@ export KERNEL_NAME=$KERNEL_VERSION
 
 # Select correct release from Google
 case $KERNEL_VERSION in
-"1" | "chromeos-5.10") KERNEL_VERSION="release-R101-14588.B-chromeos-5.10" ;;
+"1" | "chromeos-5.10") KERNEL_VERSION="release-R106-15054.B-chromeos-5.10" ;;
 "2" | "alt-chromeos-5.10") KERNEL_VERSION="release-R86-13421.B-chromeos-5.4" ;;
 "3" | "chromeos-5.4") KERNEL_VERSION="release-R101-14588.B-chromeos-5.4" ;;
 "4" | "chromeos-4.19") KERNEL_VERSION="release-R101-14588.B-chromeos-4.19" ;;

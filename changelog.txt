@@ -1,1 +1,1 @@
-Split main repo into multiple subrepos and move all kernel stuff to a separate repo
+Try newer stable version, release-R106-15054.B-chromeos-5.10
