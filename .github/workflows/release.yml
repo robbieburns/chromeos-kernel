@@ -1,7 +1,7 @@
 name: Publish
 on:
   workflow_run:
-    workflows: [ "Build stable kernel" ] # wait for stable, as it seems it takes the longest
+    workflows: [ "Build experimental kernel" ] # wait for exp, as it seems it takes the longest
     types:
       - completed
 
