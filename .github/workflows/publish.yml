@@ -18,7 +18,7 @@ jobs:
       - name: Generating release tag and setting prerelease
         id: tag
         run: |
-          if echo ${{ github.event.head_commit.message }} | grep -c "dev"
+          if echo $(git log -1 --pretty=format:"%s") | grep -c "dev"
           then
             echo "::set-output name=release_tag::dev-build"
             echo "::set-output name=release_type::true"
@@ -61,17 +61,11 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.tag.outputs.release_tag }}
-          name: Kernel build - ${{ github.event.head_commit.message }}
+          name: Kernel build - $(git log -1 --pretty=format:"%s")
           prerelease: ${{ steps.tag.outputs.release_type }}
           body: |
-            Changelog:
-            ```
-            ```
             Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
           files: |
             /tmp/artifacts/bzImage*
             /tmp/artifacts/modules*
-            /tmp/artifacts/System.map-eupnea*
-            /tmp/artifacts/config-eupnea*
-
-
+            /tmp/artifacts/kernel*

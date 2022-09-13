@@ -19,7 +19,7 @@ jobs:
           swap-size-mb: 1024
           remove-dotnet: 'true'
 
-      - name: Waiting for new commit
+      - name: Waiting for new commit to settle
         run: sleep 10
 
       - name: Checking out repository code
@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 1
 
       - name: Building the alt kernel
-        run: bash build.sh alt-chromeos-5.10
+        run: python3 build.py alt-chromeos-5.10
 
       - name: Uploading to ci-storage
         uses: actions/upload-artifact@v2
@@ -36,5 +36,6 @@ jobs:
           name: alt-kernel
           retention-days: 1
           path: |
-            bzImage.alt
-            modules.alt.tar.xz
+            bzImage-alt
+            modules-alt.tar.xz
+            kernel-alt.config
