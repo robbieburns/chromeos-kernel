@@ -27,8 +27,13 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Installing python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
       - name: Building the standard Kernel
-        run: python3 kernel_build.py chromeos-5.10
+        run: python kernel_build.py chromeos-5.10
 
       - name: Uploading to as artifact
         uses: actions/upload-artifact@v2
