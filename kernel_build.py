@@ -161,7 +161,7 @@ if __name__ == "__main__":
         print("netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison cgpt "
               "vboot-kernel-utils")
         exit(1)
-    if not args.version == "":
+    if args.version == "":
         print("Which kernel version would you like to use? ")
         print("Manual building is not supported yet. Use the old script for now.")
         exit(1)
