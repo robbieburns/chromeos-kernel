@@ -16,8 +16,7 @@ import json
 # parse arguments from the cli.
 def process_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument(dest="version", type=str, nargs=1,
-                        help="Kernel version to build(flag intended for docker containers)")
+    parser.add_argument(dest="version", type=str, help="Kernel version to build(flag intended for docker containers)")
     parser.add_argument("-i", "--ignore-os", action="store_true", dest="ignore_os", default=False,
                         help="Allow building on non Ubuntu/debian based systems")
     return parser.parse_args()
@@ -110,7 +109,7 @@ def build_kernel() -> None:
         print("\033[91m" + f"Kernel build failed in: {time.time() - kernel_start}" + "\033[0m")
         exit(1)
     else:
-        print("\033[91m" + f"Kernel build succeeded in: {time.time() - kernel_start}" + "\033[0m")
+        print("\033[96m" + f"Kernel build succeeded in: {time.time() - kernel_start}" + "\033[0m")
 
 
 def build_modules() -> None:
@@ -125,7 +124,7 @@ def build_modules() -> None:
         print("\033[91m" + f"Modules build failed in: {time.time() - modules_start}" + "\033[0m")
         exit(1)
     else:
-        print("\033[91m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m")
+        print("\033[96m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m")
 
     print("\033[96m" + "Compressing modules" + "\033[0m")
     # TODO: convert to one liner
@@ -138,7 +137,7 @@ def build_modules() -> None:
         print("\033[91m" + f"Modules archival failed in: {time.time() - modules_start}" + "\033[0m")
         exit(1)
     else:
-        print("\033[91m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m")
+        print("\033[96m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m")
     os.chdir("..")  # go back to chromeos kernel root
 
 
@@ -168,8 +167,12 @@ if __name__ == "__main__":
         # TODO: add version selection for users
     prepare_host()
     # get kernel_head
-    with open("kernel_versions.json", "r") as file:
-        read_kernel_head = json.load(file)[args.version]
+    try:
+        with open("kernel_versions.json", "r") as file:
+            read_kernel_head = json.load(file)[args.version]
+    except KeyError:
+        print("\033[91m" + "Kernel version not available." + "\033[0m")
+        exit(1)
     clone_kernel(read_kernel_head)
     create_boot_image()
     apply_patches()
