@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 1
 
       - name: Building the experimental kernel
-        run: python3 build.py chromeos-5.15
+        run: python3 kernel_build.py chromeos-5.15
 
       - name: Uploading to ci-storage
         uses: actions/upload-artifact@v2

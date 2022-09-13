@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 1
 
       - name: Building the alt kernel
-        run: python3 build.py alt-chromeos-5.10
+        run: python3 kernel_build.py alt-chromeos-5.10
 
       - name: Uploading to ci-storage
         uses: actions/upload-artifact@v2
