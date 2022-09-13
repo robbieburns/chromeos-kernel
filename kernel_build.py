@@ -44,6 +44,7 @@ def clone_kernel(kernel_head: str) -> None:
         os.chdir("./chromeos-kernel")
 
 
+# Create boot icon/image
 def create_boot_image():
     print("\033[96m" + "Creating boot image" + "\033[0m")
     # TODO: Boot image
@@ -120,11 +121,12 @@ def build_modules() -> None:
 
     print("\033[96m" + "Building modules" + "\033[0m")
     modules_start = time.time()
-    if sp.run(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod", shell=True).returncode == 2:
-        print("\033[91m" + f"Modules build failed in: {time.time() - modules_start}" + "\033[0m")
-        exit(1)
-    else:
-        print("\033[96m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m")
+    bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod")
+    # if sp.run(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod", shell=True).returncode == 2:
+    #     print("\033[91m" + f"Modules build failed in: {time.time() - modules_start}" + "\033[0m")
+    #     exit(1)
+    # else:
+    print("\033[96m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m")
 
     print("\033[96m" + "Compressing modules" + "\033[0m")
     # TODO: convert to one liner
