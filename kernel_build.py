@@ -146,11 +146,12 @@ def build_modules() -> None:
         file.write("xz -9 -T0")
     bash("chmod +x fastxz")  # make script executable
     modules_start = time.time()
-    if sp.run("tar -cvI './fastxz' -f ../modules.tar.xz lib/", shell=True).returncode == 2:
-        print("\033[91m" + f"Modules archival failed in: {time.time() - modules_start}" + "\033[0m")
-        exit(1)
-    else:
-        print("\033[96m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m")
+    bash("tar -cvI './fastxz' -f ../modules.tar.xz lib/")
+    # if sp.run("tar -cvI './fastxz' -f ../modules.tar.xz lib/", shell=True).returncode == 2:
+    #     print("\033[91m" + f"Modules archival failed in: {time.time() - modules_start}" + "\033[0m")
+    #     exit(1)
+    # else:
+    print("\033[96m" + f"Modules archival succeeded in: {time.time() - modules_start}" + "\033[0m")
     os.chdir("..")  # go back to chromeos kernel root
 
 
