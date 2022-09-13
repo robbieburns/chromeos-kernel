@@ -104,11 +104,12 @@ def build_kernel() -> None:
 
     print("\033[96m" + "Building kernel" + "\033[0m")
     kernel_start = time.time()
-    if sp.run(f"make -j{cores}", shell=True).returncode == 2:
-        print("\033[91m" + f"Kernel build failed in: {time.time() - kernel_start}" + "\033[0m")
-        exit(1)
-    else:
-        print("\033[96m" + f"Kernel build succeeded in: {time.time() - kernel_start}" + "\033[0m")
+    bash(f"make -j{cores}")
+    # if sp.run(f"make -j{cores}", shell=True).returncode == 2:
+    #    print("\033[91m" + f"Kernel build failed in: {time.time() - kernel_start}" + "\033[0m")
+    #    exit(1)
+    # else:
+    print("\033[96m" + f"Kernel build succeeded in: {time.time() - kernel_start}" + "\033[0m")
 
 
 def build_modules() -> None:
