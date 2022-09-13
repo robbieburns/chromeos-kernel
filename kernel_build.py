@@ -52,13 +52,13 @@ def create_boot_image():
 def apply_patches():
     print("\033[96m" + "Applying Eupnea patches" + "\033[0m")
 
-    print("Applying bloog audio patch")
+    print("\033[96m" + "Applying bloog audio patch" + "\033[0m")
     patch_bloog = patch("bloog-audio.patch")
     if patch_bloog.__contains__("patch does not apply"):
         print(patch_bloog)
         print("Bloog audio patch already applied")
 
-    print("Applying important jsl i915 patch")
+    print("\033[96m" + "Applying important jsl i915 patch" + "\033[0m")
     patch_jsl = patch("jsl-i915.patch")
     if patch_jsl.__contains__("patch does not apply"):
         print("Checking if patch is already applied")
@@ -68,16 +68,15 @@ def apply_patches():
             print("Bloog audio patch already applied")
         else:
             print(patch_jsl)
-            print("JSL i915 patch is not applied: CRITICAL ERROR")
-            exit(1)
+            print("\033[91m" + "JSL i915 patch is not applied!! CRITICAL ERROR" + "\033[0m")
 
-    print("Applying headphone jack patch")
+    print("\033[96m" + "Applying headphone jack patch" + "\033[0m")
     patch_jack = patch("jack-detection.patch")
     if patch_jack.__contains__("patch does not apply"):
         print(patch_jack)
         print("Headphone jack patch already applied")
 
-    print("Applying headphone jack utils patch")
+    print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m")
     patch_jack_utils = patch("jack-detection-utils.patch")
     if patch_jack.__contains__("patch does not apply"):
         print(patch_jack_utils)
