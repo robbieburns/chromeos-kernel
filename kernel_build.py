@@ -219,6 +219,9 @@ if __name__ == "__main__":
 
     # copy files to actual root
     print("\033[96m" + "Copying files to actual root" + "\033[0m")
+
+    print(os.getcwd())
+
     cp("modules.tar.xz", f"../{modules_name}")
     cp("arch/x86/boot/bzImage", f"../{bzImage_name}")
     # cp("System.map", f"../{system_map_name}")
