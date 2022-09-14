@@ -104,15 +104,15 @@ def build_kernel() -> None:
     # TODO: add config editing for users
 
     # Remove all debug options from kernel config
-    with open(".config", "r") as file:
-        config = file.readlines()
-    new_config = []
-    for line in config:
-        if line.__contains__("CONFIG_DEBUG"):
-            line = "# " + line
-        new_config.append(line)
-    with open(".config", "w") as file:
-        file.writelines(new_config)
+    # with open(".config", "r") as file:
+    #     config = file.readlines()
+    # new_config = []
+    # for line in config:
+    #     if line.__contains__("CONFIG_DEBUG"):
+    #         line = "# " + line
+    #     new_config.append(line)
+    # with open(".config", "w") as file:
+    #     file.writelines(new_config)
 
     print("\033[96m" + "Building kernel" + "\033[0m", flush=True)
     kernel_start = time.time()
