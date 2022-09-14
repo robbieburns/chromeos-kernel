@@ -121,6 +121,7 @@ def build_kernel() -> None:
     #    print("\033[91m" + f"Kernel build failed in: {time.time() - kernel_start}" + "\033[0m")
     #    exit(1)
     # else:
+    bash("echo $?")
     print("\033[96m" + f"Kernel build succeeded in: {time.time() - kernel_start}" + "\033[0m", flush=True)
 
 
