@@ -131,7 +131,7 @@ def build_modules() -> None:
 
     print("\033[96m" + "Building modules" + "\033[0m", flush=True)
     modules_start = time.time()
-    print(os.getcwd())
+    print(os.getcwd(), flush=True)
     bash("ls -a")
     bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod")
     # if sp.run(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod", shell=True).returncode == 2:
