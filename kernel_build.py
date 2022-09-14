@@ -128,7 +128,6 @@ def build_modules() -> None:
     print("\033[96m" + "Preparing for modules build" + "\033[0m", flush=True)
     rmdir("mod", ignore_errors=True)  # just in case
     Path("mod").mkdir()
-    os.chdir("./mod")
 
     print("\033[96m" + "Building modules" + "\033[0m", flush=True)
     modules_start = time.time()
@@ -140,6 +139,7 @@ def build_modules() -> None:
     print("\033[96m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m", flush=True)
 
     print("\033[96m" + "Compressing modules" + "\033[0m", flush=True)
+    os.chdir("./mod")
     # TODO: convert to one liner
     # create extraction script
     with open("fastxz", "w") as file:
