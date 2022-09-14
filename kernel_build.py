@@ -222,8 +222,11 @@ if __name__ == "__main__":
 
     print(os.getcwd())
 
+    bash("ls -a")
+    bash("ls arch/x86/boot")
+
     cp("modules.tar.xz", f"../{modules_name}")
-    cp("arch/x86/boot/bzImage", f"../{bzImage_name}")
+    # cp("arch/x86/boot/bzImage", f"../{bzImage_name}")
     # cp("System.map", f"../{system_map_name}")
     cp(".config", f"../{config_name}")
 
