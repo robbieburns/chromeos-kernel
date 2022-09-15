@@ -101,9 +101,9 @@ def build_kernel() -> None:
     # copy config file from github
     os.remove(".config")
     if args.version == "alt-chromeos-5.10":
-        bash("cp ../kernel-alt.conf .config")
+        cp("../kernel-alt.conf", "./.config")
     else:
-        bash("cp ../kernel.conf .config")
+        cp("../kernel.conf", "./.config")
 
     # make config with default selections
     print("\033[96m" + "Making config with default options" + "\033[0m", flush=True)
