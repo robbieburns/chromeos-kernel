@@ -99,7 +99,10 @@ def build_kernel() -> None:
         file.write("")
 
     # copy config file from github
-    os.remove(".config")
+    try:
+        os.remove(".config", )
+    except FileNotFoundError:
+        pass
     if args.version == "alt-chromeos-5.10":
         bash("cp ../kernel-alt.conf ./.config")
     else:
