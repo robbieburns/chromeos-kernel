@@ -32,10 +32,10 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Building the standard Kernel
+      - name: Building the stable Kernel
         run: python kernel_build.py chromeos-5.10
 
-      - name: Uploading to as artifact
+      - name: Uploading as artifact
         uses: actions/upload-artifact@v2
         with:
           name: stable-kernel

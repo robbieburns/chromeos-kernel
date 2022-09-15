@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 1
 
       - name: Deleting old dev release
-        if: "contains(github.event.head_commit.message, 'dev')"
+        if: "!contains(github.event.head_commit.message, 'stable')"
         uses: dev-drprasad/delete-tag-and-release@v0.2.0
         with:
           delete_release: true
@@ -26,4 +26,4 @@ jobs:
       - name: Purging old artifacts
         uses: c-hive/gha-remove-artifacts@v1
         with:
-          age: '2 seconds' # purge all
+          age: '2 seconds' # purge all artifacts older than 2 seconds (aka all artifacts)

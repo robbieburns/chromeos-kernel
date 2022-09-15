@@ -35,7 +35,7 @@ jobs:
       - name: Building the experimental kernel
         run: python kernel_build.py chromeos-5.15
 
-      - name: Uploading to ci-storage
+      - name: Uploading as artifact
         uses: actions/upload-artifact@v2
         with:
           name: exp-kernel

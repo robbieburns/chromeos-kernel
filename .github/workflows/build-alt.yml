@@ -35,7 +35,7 @@ jobs:
       - name: Building the alt kernel
         run: python kernel_build.py alt-chromeos-5.10
 
-      - name: Uploading to ci-storage
+      - name: Uploading as artifact
         uses: actions/upload-artifact@v2
         with:
           name: alt-kernel
