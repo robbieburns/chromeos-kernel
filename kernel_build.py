@@ -26,7 +26,7 @@ def prepare_host() -> None:
     print("\033[96m" + "Preparing host system" + "\033[0m", flush=True)
     bash("apt update -y")
     bash("apt install -y netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev "
-         "bison cgpt vboot-kernel-utils")
+         "bison binutils")
     # TODO: add cleaning after previous builds
 
 
@@ -97,6 +97,13 @@ def build_kernel() -> None:
     # create .scmversion
     with open(".scmversion", "w") as file:
         file.write("")
+
+    # copy config file from github
+    os.remove(".config")
+    if args.version == "alt-chromeos-5.10":
+        cp("../kernel-alt.conf", ".config")
+    else:
+        cp("../kernel.conf", ".config")
 
     # make config with default selections
     print("\033[96m" + "Making config with default options" + "\033[0m", flush=True)
