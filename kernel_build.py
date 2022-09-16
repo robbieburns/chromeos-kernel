@@ -52,7 +52,6 @@ def apply_patches():
         print("\033[96m" + "Applying bloog audio patch" + "\033[0m", flush=True)
         patch_bloog = bash_return(f"git apply ../patches/bloog-audio.patch")
     except subprocess.CalledProcessError:
-        print(patch_bloog, flush=True)
         print("Bloog audio patch already applied", flush=True)
 
     try:
@@ -65,7 +64,6 @@ def apply_patches():
             bash_return('grep -C3 "BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0)" drivers/gpu/drm/i915/i915_pci.c | '
                         'grep "jsl_info" -A5 | grep -c ".require_force_probe = 1"')
         except subprocess.CalledProcessError:
-            print(patch_jsl, flush=True)
             print("\033[91m" + "JSL i915 patch is not applied!! CRITICAL ERROR" + "\033[0m", flush=True)
             exit(1)
         else:
@@ -75,14 +73,12 @@ def apply_patches():
         print("\033[96m" + "Applying headphone jack patch" + "\033[0m", flush=True)
         patch_jack = bash_return(f"git apply ../patches/jack-detection.patch").strip()
     except subprocess.CalledProcessError:
-        print(patch_jack, flush=True)
         print("Headphone jack patch already applied", flush=True)
 
     try:
         print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m", flush=True)
         patch_jack_utils = bash_return(f"git apply ../patches/jack-detection-utils.patch").strip()
     except subprocess.CalledProcessError:
-        print(patch_jack_utils, flush=True)
         print("Headphone jack utils patch already applied", flush=True)
 
 
