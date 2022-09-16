@@ -2,11 +2,7 @@
 # CHROMEOS COMPILE INSTRUCTIONS: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/kernel-configuration/
 
 import os
-from os import system as bash
-from subprocess import check_output as bash_return
-from shutil import rmtree as rmdir, copy
-from pathlib import Path
-import sys
+from functions import *
 import argparse
 import time
 import json
@@ -53,31 +49,33 @@ def apply_patches():
     print("\033[96m" + "Applying Eupnea patches" + "\033[0m", flush=True)
 
     print("\033[96m" + "Applying bloog audio patch" + "\033[0m", flush=True)
-    patch_bloog = bash_return(f"git apply ../patches/bloog-audio.patch", shell=True, text=True).strip()
+    patch_bloog = bash_return(f"git apply ../patches/bloog-audio.patch")
     if patch_bloog.__contains__("patch does not apply"):
         print(patch_bloog, flush=True)
         print("Bloog audio patch already applied", flush=True)
 
     print("\033[96m" + "Applying important jsl i915 patch" + "\033[0m", flush=True)
-    patch_jsl = bash_return(f"git apply ../patches/jsl-i915.patch", shell=True, text=True).strip()
+    patch_jsl = bash_return(f"git apply ../patches/jsl-i915.patch")
     if patch_jsl.__contains__("patch does not apply"):
         print("Checking if patch is already applied", flush=True)
         # check if patch is actually applied
-        if bash_return('grep -C3 "BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0)" drivers/gpu/drm/i915/i915_pci.c | '
-                       'grep "jsl_info" -A5 | grep -c ".require_force_probe = 1"', shell=True, text=True) == "1":
+        try:
+            bash_return('grep -C3 "BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0)" drivers/gpu/drm/i915/i915_pci.c | '
+                        'grep "jsl_info" -A5 | grep -c ".require_force_probe = 1"')
+        except subprocess.CalledProcessError:
             print(patch_jsl, flush=True)
             print("\033[91m" + "JSL i915 patch is not applied!! CRITICAL ERROR" + "\033[0m", flush=True)
         else:
             print("Bloog audio patch already applied", flush=True)
 
     print("\033[96m" + "Applying headphone jack patch" + "\033[0m", flush=True)
-    patch_jack = bash_return(f"git apply ../patches/jack-detection.patch", shell=True, text=True).strip()
+    patch_jack = bash_return(f"git apply ../patches/jack-detection.patch").strip()
     if patch_jack.__contains__("patch does not apply"):
         print(patch_jack, flush=True)
         print("Headphone jack patch already applied", flush=True)
 
     print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m", flush=True)
-    patch_jack_utils = bash_return(f"git apply ../patches/jack-detection-utils.patch", shell=True, text=True).strip()
+    patch_jack_utils = bash_return(f"git apply ../patches/jack-detection-utils.patch").strip()
     if patch_jack.__contains__("patch does not apply"):
         print(patch_jack_utils, flush=True)
         print("Headphone jack utils patch already applied", flush=True)
@@ -95,55 +93,41 @@ def build_kernel() -> None:
 
     # copy config file from GitHub
     try:
-        os.remove(".config", )
+        rmfile(".config", )
     except FileNotFoundError:
         pass
     if args.version == "alt-chromeos-5.10":
-        bash("cp ../kernel-alt.conf ./.config")
+        cpfile("../kernel-alt.conf", "./.config")
     else:
-        bash("cp ../kernel.conf ./.config")
+        cpfile("../kernel.conf", "./.config")
 
     # make config with default selections
     print("\033[96m" + "Making config with default options" + "\033[0m", flush=True)
     bash("make olddefconfig")
     # TODO: add config editing for users
 
-    # Remove all debug options from kernel config
-    # with open(".config", "r") as file:
-    #     config = file.readlines()
-    # new_config = []
-    # for line in config:
-    #     if line.__contains__("CONFIG_DEBUG"):
-    #         line = "# " + line
-    #     new_config.append(line)
-    # with open(".config", "w") as file:
-    #     file.writelines(new_config)
-
     print("\033[96m" + "Building kernel" + "\033[0m", flush=True)
     kernel_start = time.time()
-    bash(f"make -j{cores}")
-    # if sp.run(f"make -j{cores}", shell=True).returncode == 2:
-    #    print("\033[91m" + f"Kernel build failed in: {time.time() - kernel_start}" + "\033[0m")
-    #    exit(1)
-    # else:
-    bash("echo $?")
+    try:
+        bash(f"make -j{cores}")
+    except subprocess.CalledProcessError:
+        print("\033[91m" + f"Kernel build failed in: {time.time() - kernel_start}" + "\033[0m")
+        exit(1)
     print("\033[96m" + f"Kernel build succeeded in: {time.time() - kernel_start}" + "\033[0m", flush=True)
 
 
 def build_modules() -> None:
     print("\033[96m" + "Preparing for modules build" + "\033[0m", flush=True)
-    rmdir("mod", ignore_errors=True)  # just in case
-    Path("mod").mkdir()
+    rmdir("mod")  # just in case
+    mkdir("mod")
 
     print("\033[96m" + "Building modules" + "\033[0m", flush=True)
     modules_start = time.time()
-    print(os.getcwd(), flush=True)
-    bash("ls -a")
-    bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod")
-    # if sp.run(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod", shell=True).returncode == 2:
-    #     print("\033[91m" + f"Modules build failed in: {time.time() - modules_start}" + "\033[0m")
-    #     exit(1)
-    # else:
+    try:
+        bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod")
+    except subprocess.CalledProcessError:
+        print("\033[91m" + f"Modules build failed in: {time.time() - modules_start}" + "\033[0m")
+        exit(1)
     print("\033[96m" + f"Modules build succeeded in: {time.time() - modules_start}" + "\033[0m", flush=True)
 
     print("\033[96m" + "Compressing modules" + "\033[0m", flush=True)
@@ -154,11 +138,11 @@ def build_modules() -> None:
         file.write("xz -9 -T0")
     bash("chmod +x fastxz")  # make script executable
     modules_start = time.time()
-    bash("tar -cvI './fastxz' -f ../modules.tar.xz lib/")
-    # if sp.run("tar -cvI './fastxz' -f ../modules.tar.xz lib/", shell=True).returncode == 2:
-    #     print("\033[91m" + f"Modules archival failed in: {time.time() - modules_start}" + "\033[0m")
-    #     exit(1)
-    # else:
+    try:
+        bash("tar -cvI './fastxz' -f ../modules.tar.xz lib/")
+    except subprocess.CalledProcessError:
+        print("\033[91m" + f"Modules archival failed in: {time.time() - modules_start}" + "\033[0m")
+        exit(1)
     print("\033[96m" + f"Modules archival succeeded in: {time.time() - modules_start}" + "\033[0m", flush=True)
     os.chdir("..")  # go back to chromeos kernel root
 
@@ -172,11 +156,11 @@ if __name__ == "__main__":
     args = process_args()
 
     # get number of cores
-    cores = bash_return("nproc", shell=True, text=True).strip()
+    cores = bash_return("nproc")
     print(f"Available cores: {cores}", flush=True)
 
     # check if running on ubuntu
-    if not os.path.exists("/usr/bin/apt") and not args.ignore_os:  # check if running on ubuntu/debian
+    if not (path_exists("/usr/bin/apt") and args.ignore_os):  # check if running on ubuntu/debian
         print("This script is made for Ubuntu(docker). Use --ignore-os to run on other systems.\n"
               " Install these packages using your package manager:", flush=True)
         print("netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison cgpt "
@@ -228,14 +212,9 @@ if __name__ == "__main__":
     # copy files to actual root
     print("\033[96m" + "Copying files to actual root" + "\033[0m", flush=True)
 
-    print(os.getcwd(), flush=True)
-
-    bash("ls -a")
-    bash("ls arch/x86/boot")
-
-    copy("modules.tar.xz", f"../{modules_name}")
-    copy("arch/x86/boot/bzImage", f"../{bzImage_name}")
+    cpfile("modules.tar.xz", f"../{modules_name}")
+    cpfile("arch/x86/boot/bzImage", f"../{bzImage_name}")
     # cp("System.map", f"../{system_map_name}")
-    copy(".config", f"../{config_name}")
+    cpfile(".config", f"../{config_name}")
 
     print("\033[96m" + f"Build completed in: {time.time() - script_start}" + "\033[0m", flush=True)
