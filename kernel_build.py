@@ -48,15 +48,17 @@ def create_boot_image():
 def apply_patches():
     print("\033[96m" + "Applying Eupnea patches" + "\033[0m", flush=True)
 
-    print("\033[96m" + "Applying bloog audio patch" + "\033[0m", flush=True)
-    patch_bloog = bash_return(f"git apply ../patches/bloog-audio.patch")
-    if patch_bloog.__contains__("patch does not apply"):
+    try:
+        print("\033[96m" + "Applying bloog audio patch" + "\033[0m", flush=True)
+        patch_bloog = bash_return(f"git apply ../patches/bloog-audio.patch")
+    except subprocess.CalledProcessError:
         print(patch_bloog, flush=True)
         print("Bloog audio patch already applied", flush=True)
 
-    print("\033[96m" + "Applying important jsl i915 patch" + "\033[0m", flush=True)
-    patch_jsl = bash_return(f"git apply ../patches/jsl-i915.patch")
-    if patch_jsl.__contains__("patch does not apply"):
+    try:
+        print("\033[96m" + "Applying important jsl i915 patch" + "\033[0m", flush=True)
+        patch_jsl = bash_return(f"git apply ../patches/jsl-i915.patch")
+    except subprocess.CalledProcessError:
         print("Checking if patch is already applied", flush=True)
         # check if patch is actually applied
         try:
@@ -65,18 +67,21 @@ def apply_patches():
         except subprocess.CalledProcessError:
             print(patch_jsl, flush=True)
             print("\033[91m" + "JSL i915 patch is not applied!! CRITICAL ERROR" + "\033[0m", flush=True)
+            exit(1)
         else:
             print("Bloog audio patch already applied", flush=True)
 
-    print("\033[96m" + "Applying headphone jack patch" + "\033[0m", flush=True)
-    patch_jack = bash_return(f"git apply ../patches/jack-detection.patch").strip()
-    if patch_jack.__contains__("patch does not apply"):
+    try:
+        print("\033[96m" + "Applying headphone jack patch" + "\033[0m", flush=True)
+        patch_jack = bash_return(f"git apply ../patches/jack-detection.patch").strip()
+    except subprocess.CalledProcessError:
         print(patch_jack, flush=True)
         print("Headphone jack patch already applied", flush=True)
 
-    print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m", flush=True)
-    patch_jack_utils = bash_return(f"git apply ../patches/jack-detection-utils.patch").strip()
-    if patch_jack.__contains__("patch does not apply"):
+    try:
+        print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m", flush=True)
+        patch_jack_utils = bash_return(f"git apply ../patches/jack-detection-utils.patch").strip()
+    except subprocess.CalledProcessError:
         print(patch_jack_utils, flush=True)
         print("Headphone jack utils patch already applied", flush=True)
 
