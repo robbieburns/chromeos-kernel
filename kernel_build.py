@@ -160,7 +160,7 @@ if __name__ == "__main__":
     print(f"Available cores: {cores}", flush=True)
 
     # check if running on ubuntu
-    if not (path_exists("/usr/bin/apt") and args.ignore_os):  # check if running on ubuntu/debian
+    if not path_exists("/usr/bin/apt") and args.ignore_os:  # check if running on ubuntu/debian
         print("This script is made for Ubuntu(docker). Use --ignore-os to run on other systems.\n"
               " Install these packages using your package manager:", flush=True)
         print("netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison cgpt "
