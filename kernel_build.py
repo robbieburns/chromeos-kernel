@@ -2,13 +2,12 @@
 # CHROMEOS COMPILE INSTRUCTIONS: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/kernel-configuration/
 
 import os
-from shutil import rmtree as rmdir
-from shutil import copy as cp
+from os import system as bash
+from subprocess import check_output as bash_return
+from shutil import rmtree as rmdir, copy
 from pathlib import Path
 import sys
 import argparse
-import subprocess as sp
-from os import system as bash
 import time
 import json
 
@@ -54,38 +53,34 @@ def apply_patches():
     print("\033[96m" + "Applying Eupnea patches" + "\033[0m", flush=True)
 
     print("\033[96m" + "Applying bloog audio patch" + "\033[0m", flush=True)
-    patch_bloog = patch("bloog-audio.patch")
+    patch_bloog = bash_return(f"git apply ../patches/bloog-audio.patch", shell=True, text=True).strip()
     if patch_bloog.__contains__("patch does not apply"):
         print(patch_bloog, flush=True)
         print("Bloog audio patch already applied", flush=True)
 
     print("\033[96m" + "Applying important jsl i915 patch" + "\033[0m", flush=True)
-    patch_jsl = patch("jsl-i915.patch")
+    patch_jsl = bash_return(f"git apply ../patches/jsl-i915.patch", shell=True, text=True).strip()
     if patch_jsl.__contains__("patch does not apply"):
         print("Checking if patch is already applied", flush=True)
         # check if patch is actually applied
-        if patch('grep -C3 "BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0)" drivers/gpu/drm/i915/i915_pci.c | grep '
-                 '"jsl_info" -A5 | grep ".require_force_probe = 1"') == "":
-            print("Bloog audio patch already applied", flush=True)
-        else:
+        if bash_return('grep -C3 "BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0)" drivers/gpu/drm/i915/i915_pci.c | '
+                       'grep "jsl_info" -A5 | grep -c ".require_force_probe = 1"', shell=True, text=True) == "1":
             print(patch_jsl, flush=True)
             print("\033[91m" + "JSL i915 patch is not applied!! CRITICAL ERROR" + "\033[0m", flush=True)
+        else:
+            print("Bloog audio patch already applied", flush=True)
 
     print("\033[96m" + "Applying headphone jack patch" + "\033[0m", flush=True)
-    patch_jack = patch("jack-detection.patch")
+    patch_jack = bash_return(f"git apply ../patches/jack-detection.patch", shell=True, text=True).strip()
     if patch_jack.__contains__("patch does not apply"):
         print(patch_jack, flush=True)
         print("Headphone jack patch already applied", flush=True)
 
     print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m", flush=True)
-    patch_jack_utils = patch("jack-detection-utils.patch")
+    patch_jack_utils = bash_return(f"git apply ../patches/jack-detection-utils.patch", shell=True, text=True).strip()
     if patch_jack.__contains__("patch does not apply"):
         print(patch_jack_utils, flush=True)
         print("Headphone jack utils patch already applied", flush=True)
-
-
-def patch(patch: str) -> str:
-    return sp.run(f"git apply ../patches/{patch}", shell=True, capture_output=True).stderr.decode("utf-8").strip()
 
 
 def build_kernel() -> None:
@@ -98,7 +93,7 @@ def build_kernel() -> None:
     with open(".scmversion", "w") as file:
         file.write("")
 
-    # copy config file from github
+    # copy config file from GitHub
     try:
         os.remove(".config", )
     except FileNotFoundError:
@@ -170,14 +165,14 @@ def build_modules() -> None:
 
 if __name__ == "__main__":
     # Elevate script to root
-    if os.geteuid() != 0:
-        args = ['sudo', sys.executable] + sys.argv + [os.environ]
-        os.execlpe('sudo', *args)
+    if not os.geteuid() == 0:
+        sudo_args = ['sudo', sys.executable] + sys.argv + [os.environ]
+        os.execlpe('sudo', *sudo_args)
     script_start = time.time()
     args = process_args()
 
     # get number of cores
-    cores = sp.run("nproc", shell=True, capture_output=True).stdout.decode("utf-8").strip()
+    cores = bash_return("nproc", shell=True, text=True).strip()
     print(f"Available cores: {cores}", flush=True)
 
     # check if running on ubuntu
@@ -195,8 +190,8 @@ if __name__ == "__main__":
     prepare_host()
     # get kernel_head
     try:
-        with open("kernel_versions.json", "r") as file:
-            read_kernel_head = json.load(file)[args.version]
+        with open("kernel_versions.json", "r") as json_file:
+            read_kernel_head = json.load(json_file)[args.version]
     except KeyError:
         print("\033[91m" + "Kernel version not available." + "\033[0m", flush=True)
         exit(1)
@@ -238,9 +233,9 @@ if __name__ == "__main__":
     bash("ls -a")
     bash("ls arch/x86/boot")
 
-    cp("modules.tar.xz", f"../{modules_name}")
-    cp("arch/x86/boot/bzImage", f"../{bzImage_name}")
+    copy("modules.tar.xz", f"../{modules_name}")
+    copy("arch/x86/boot/bzImage", f"../{bzImage_name}")
     # cp("System.map", f"../{system_map_name}")
-    cp(".config", f"../{config_name}")
+    copy(".config", f"../{config_name}")
 
     print("\033[96m" + f"Build completed in: {time.time() - script_start}" + "\033[0m", flush=True)
