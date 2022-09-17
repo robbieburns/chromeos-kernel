@@ -9,7 +9,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: "!contains(git log -1, 'skip-ci')"
+    if: "!contains($(git log -1), 'skip-ci')"
     steps:
       - name: Checking out repository code
         uses: actions/checkout@v3
