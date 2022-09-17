@@ -9,8 +9,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-    if: |
-      if echo $(git log -1 --pretty=format:"%s") | grep -c "skip-ci" == 0
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checking out repository code
         uses: actions/checkout@v3
