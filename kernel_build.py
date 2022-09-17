@@ -50,13 +50,13 @@ def apply_patches():
 
     try:
         print("\033[96m" + "Applying bloog audio patch" + "\033[0m", flush=True)
-        patch_bloog = bash_return(f"git apply ../patches/bloog-audio.patch")
+        bash_return(f"git apply ../patches/bloog-audio.patch")
     except subprocess.CalledProcessError:
         print("Bloog audio patch already applied", flush=True)
 
     try:
         print("\033[96m" + "Applying important jsl i915 patch" + "\033[0m", flush=True)
-        patch_jsl = bash_return(f"git apply ../patches/jsl-i915.patch")
+        bash_return(f"git apply ../patches/jsl-i915.patch")
     except subprocess.CalledProcessError:
         print("Checking if patch is already applied", flush=True)
         # check if patch is actually applied
@@ -71,13 +71,13 @@ def apply_patches():
 
     try:
         print("\033[96m" + "Applying headphone jack patch" + "\033[0m", flush=True)
-        patch_jack = bash_return(f"git apply ../patches/jack-detection.patch").strip()
+        bash_return(f"git apply ../patches/jack-detection.patch").strip()
     except subprocess.CalledProcessError:
         print("Headphone jack patch already applied", flush=True)
 
     try:
         print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m", flush=True)
-        patch_jack_utils = bash_return(f"git apply ../patches/jack-detection-utils.patch").strip()
+        bash_return(f"git apply ../patches/jack-detection-utils.patch").strip()
     except subprocess.CalledProcessError:
         print("Headphone jack utils patch already applied", flush=True)
 
