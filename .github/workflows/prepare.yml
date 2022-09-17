@@ -22,8 +22,3 @@ jobs:
           tag_name: dev-build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Purging old artifacts
-        uses: c-hive/gha-remove-artifacts@v1
-        with:
-          age: '2 seconds' # purge all artifacts older than 2 seconds (aka all artifacts)
