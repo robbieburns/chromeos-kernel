@@ -10,7 +10,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: |
-      echo $(git log -1 --pretty=format:"%s") | grep -c "skip-ci" == 0
+      if echo $(git log -1 --pretty=format:"%s") | grep -c "skip-ci" == 0
     steps:
       - name: Checking out repository code
         uses: actions/checkout@v3
