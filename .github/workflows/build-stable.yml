@@ -43,4 +43,5 @@ jobs:
           path: |
             bzImage
             modules.tar.xz
+            headers.tar.xz 
             kernel.config

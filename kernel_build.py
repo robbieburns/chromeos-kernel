@@ -147,6 +147,37 @@ def build_modules() -> None:
     os.chdir("..")  # go back to chromeos kernel root
 
 
+def build_headers():
+    print("\033[96m" + "Preparing for kernel build" + "\033[0m", flush=True)
+    rmdir("headers")  # just in case
+    mkdir("headers")
+
+    print("\033[96m" + "Building headers" + "\033[0m", flush=True)
+    modules_start = time.time()
+    try:
+        bash(f"make -j{cores} headers_install INSTALL_MOD_PATH=headers")
+    except subprocess.CalledProcessError:
+        print("\033[91m" + f"Headers build failed in: {time.time() - modules_start}" + "\033[0m")
+        exit(1)
+    print("\033[96m" + f"Headers build succeeded in: {time.time() - modules_start}" + "\033[0m", flush=True)
+
+    print("\033[96m" + "Compressing headers" + "\033[0m", flush=True)
+    os.chdir("./headers")
+    # TODO: convert to one liner
+    # create extraction script
+    with open("fastxz", "w") as file:
+        file.write("xz -9 -T0")
+    bash("chmod +x fastxz")  # make script executable
+    modules_start = time.time()
+    try:
+        bash("tar -cvI './fastxz' -f ../headers.tar.xz lib/")
+    except subprocess.CalledProcessError:
+        print("\033[91m" + f"Headers archival failed in: {time.time() - modules_start}" + "\033[0m")
+        exit(1)
+    print("\033[96m" + f"Headers archival succeeded in: {time.time() - modules_start}" + "\033[0m", flush=True)
+    os.chdir("..")  # go back to chromeos kernel root
+
+
 if __name__ == "__main__":
     # Elevate script to root
     if not os.geteuid() == 0:
@@ -184,37 +215,43 @@ if __name__ == "__main__":
     apply_patches()
     build_kernel()
     build_modules()
+    build_headers()
 
     # determine file names
     match args.version:
         case "alt-chromeos-5.10":
-            modules_name = "modules-alt.tar.xz"
             bzImage_name = "bzImage-alt"
+            modules_name = "modules-alt.tar.xz"
+            headers_name = "headers-alt.tar.xz"
             # system_map_name = "System-alt.map"
             config_name = "kernel-alt.config"
         case "chromeos-5.15":
-            modules_name = "modules-exp.tar.xz"
             bzImage_name = "bzImage-exp"
+            modules_name = "modules-exp.tar.xz"
+            headers_name = "headers-exp.tar.xz"
             #  system_map_name = "System-exp.map"
             config_name = "kernel-exp.config"
         case "chromeos-5.10":
-            modules_name = "modules.tar.xz"
             bzImage_name = "bzImage"
+            modules_name = "modules.tar.xz"
+            headers_name = "headers.tar.xz"
             #  system_map_name = "System.map"
             config_name = "kernel.config"
         case _:
             # shouldn't be built by GitHub actions
-            modules_name = "modules-old.tar.xz"
             bzImage_name = "bzImage-old"
+            modules_name = "modules-old.tar.xz"
+            headers_name = "headers-old.tar.xz"
             # system_map_name = "System-old.map"
             config_name = "kernel-old.config"
 
     # copy files to actual root
     print("\033[96m" + "Copying files to actual root" + "\033[0m", flush=True)
 
-    cpfile("modules.tar.xz", f"../{modules_name}")
     cpfile("arch/x86/boot/bzImage", f"../{bzImage_name}")
+    cpfile("modules.tar.xz", f"../{modules_name}")
+    cpfile("headers.tar.xz", f"../{headers_name}")
     # cp("System.map", f"../{system_map_name}")
     cpfile(".config", f"../{config_name}")
 
-    print("\033[96m" + f"Build completed in: {time.time() - script_start}" + "\033[0m", flush=True)
+    print("\033[96m" + f"Full build completed in: {time.time() - script_start}" + "\033[0m", flush=True)

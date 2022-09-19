@@ -22,7 +22,11 @@ def rmdir(rm_dir: str, keep_dir: bool = True) -> None:
 
     # convert string to Path object
     rm_dir_as_path = Path(rm_dir)
-    unlink_files(rm_dir_as_path)
+    try:
+        unlink_files(rm_dir_as_path)
+    except RecursionError:  # python doesn't work for folders with a lot of subfolders
+        print("\033[93m" + f"Failed to remove {rm_dir}, using bash" + "\033[0m")
+        bash(f"rm -rf {rm_dir_as_path.absolute().as_posix()}")
     # Remove emtpy directory
     if not keep_dir:
         try:
@@ -61,27 +65,38 @@ def get_full_path(path: str) -> str:
 def cpdir(root_src: str, root_dst: str) -> None:  # dst_dir must be a full path, including the new dir name
     def copy_files(src: Path, dst: Path) -> None:
         # create dst dir if it doesn't exist
+        print(f"Copying {src} to {dst}")
         mkdir(dst.absolute().as_posix(), create_parents=True)
         for src_file in src.iterdir():
             if src_file.is_file():
                 dst_file = dst.joinpath(src_file.stem + src_file.suffix)
                 dst_file.write_bytes(src_file.read_bytes())
-            else:
-                new_dst = dst.joinpath(src_file.stem)
-                if new_dst.exists():
+            elif src_file.is_dir():
+                if src_file.exists():
+                    new_dst = dst.joinpath(src_file.stem + src_file.suffix)
                     copy_files(src_file, new_dst)
+                else:
+                    print("Not a file or directory?")
+                    print(src_file.absolute().as_posix())
 
     src_as_path = Path(root_src)
     dst_as_path = Path(root_dst)
     if src_as_path.exists():
-        copy_files(src_as_path, dst_as_path)
+        '''
+        try:
+            copy_files(src_as_path, dst_as_path)
+        except RecursionError:
+            print("\033[93m" + f"Failed to copy {root_src} to {root_dst}, using bash" + "\033[0m")
+            bash(f"cp -rp {src_as_path.absolute().as_posix()} {dst_as_path.absolute().as_posix()}")
+        '''
+        bash(f"cp -rp {root_src}* {root_dst}")
     else:
         print("Source directory does not exist?")
 
 
-def cpfile(src: str, dst: str) -> None:
-    src_as_path = Path(src).absolute()
-    dst_as_path = Path(dst).absolute()
+def cpfile(src: str, dst: str) -> None:  # "/etc/resolv.conf", "/mnt/eupnea/etc/resolv.conf"
+    src_as_path = Path(src)
+    dst_as_path = Path(dst)
     if src_as_path.exists():
         dst_as_path.write_bytes(src_as_path.read_bytes())
     else:

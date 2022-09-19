@@ -43,4 +43,5 @@ jobs:
           path: |
             bzImage-exp
             modules-exp.tar.xz
+            headers-exp.tar.xz
             kernel-exp.config

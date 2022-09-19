@@ -43,4 +43,5 @@ jobs:
           path: |
             bzImage-alt
             modules-alt.tar.xz
+            headers-alt.tar.xz
             kernel-alt.config
