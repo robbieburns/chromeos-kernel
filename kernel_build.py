@@ -124,7 +124,8 @@ def build_modules() -> None:
     print("\033[96m" + "Building modules" + "\033[0m", flush=True)
     modules_start = time.time()
     try:
-        bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod")
+        # INSTALL_MOD_STRIP=1 removes debug symbols -> reduces unpacked kernel modules size
+        bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod INSTALL_MOD_STRIP=1")
     except subprocess.CalledProcessError:
         print("\033[91m" + f"Modules build failed in: {time.time() - modules_start}" + "\033[0m")
         exit(1)
