@@ -225,26 +225,26 @@ if __name__ == "__main__":
             modules_name = "modules-alt.tar.xz"
             headers_name = "headers-alt.tar.xz"
             # system_map_name = "System-alt.map"
-            config_name = "kernel-alt.config"
+            # config_name = "kernel-alt.config"
         case "chromeos-5.15":
             bzImage_name = "bzImage-exp"
             modules_name = "modules-exp.tar.xz"
             headers_name = "headers-exp.tar.xz"
             #  system_map_name = "System-exp.map"
-            config_name = "kernel-exp.config"
+            # config_name = "kernel-exp.config"
         case "chromeos-5.10":
             bzImage_name = "bzImage"
             modules_name = "modules.tar.xz"
             headers_name = "headers.tar.xz"
             #  system_map_name = "System.map"
-            config_name = "kernel.config"
+            # config_name = "kernel.config"
         case _:
             # shouldn't be built by GitHub actions
             bzImage_name = "bzImage-old"
             modules_name = "modules-old.tar.xz"
             headers_name = "headers-old.tar.xz"
             # system_map_name = "System-old.map"
-            config_name = "kernel-old.config"
+            # config_name = "kernel-old.config"
 
     # copy files to actual root
     print("\033[96m" + "Copying files to actual root" + "\033[0m", flush=True)
@@ -253,6 +253,6 @@ if __name__ == "__main__":
     cpfile("modules.tar.xz", f"../{modules_name}")
     cpfile("headers.tar.xz", f"../{headers_name}")
     # cp("System.map", f"../{system_map_name}")
-    cpfile(".config", f"../{config_name}")
+    # cpfile(".config", f"../{config_name}")
 
     print("\033[96m" + f"Full build completed in: {time.time() - script_start}" + "\033[0m", flush=True)

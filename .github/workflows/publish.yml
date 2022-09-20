@@ -71,4 +71,3 @@ jobs:
             /tmp/artifacts/bzImage*
             /tmp/artifacts/modules*
             /tmp/artifacts/headers*
-            /tmp/artifacts/kernel*
