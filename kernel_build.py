@@ -50,18 +50,18 @@ def apply_patches():
 
     print("\033[96m" + "Applying bloog audio patch" + "\033[0m", flush=True)
     try:
-        bash_return(f"git apply ../patches/bloog-audio.patch")
+        bash(f"git apply ../patches/bloog-audio.patch")
     except subprocess.CalledProcessError:
         print("Bloog audio patch already applied", flush=True)
 
     print("\033[96m" + "Applying important jsl i915 patch" + "\033[0m", flush=True)
     try:
-        bash_return(f"git apply ../patches/jsl-i915.patch")
+        bash(f"git apply ../patches/jsl-i915.patch")
     except subprocess.CalledProcessError:
         print("Checking if patch is already applied", flush=True)
         # check if patch is actually applied
         try:
-            bash_return('grep -C3 "BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0)" drivers/gpu/drm/i915/i915_pci.c | '
+            bash('grep -C3 "BIT(RCS0) | BIT(BCS0) | BIT(VCS0) | BIT(VECS0)" drivers/gpu/drm/i915/i915_pci.c | '
                         'grep "jsl_info" -A5 | grep -c ".require_force_probe = 1"')
         except subprocess.CalledProcessError:
             print("\033[91m" + "JSL i915 patch is not applied!! CRITICAL ERROR" + "\033[0m", flush=True)
@@ -70,13 +70,13 @@ def apply_patches():
 
     print("\033[96m" + "Applying headphone jack patch" + "\033[0m", flush=True)
     try:
-        bash_return(f"git apply ../patches/jack-detection.patch").strip()
+        bash(f"git apply ../patches/jack-detection.patch").strip()
     except subprocess.CalledProcessError:
         print("Headphone jack patch already applied", flush=True)
 
     print("\033[96m" + "Applying headphone jack utils patch" + "\033[0m", flush=True)
     try:
-        bash_return(f"git apply ../patches/jack-detection-utils.patch").strip()
+        bash(f"git apply ../patches/jack-detection-utils.patch").strip()
     except subprocess.CalledProcessError:
         print("Headphone jack utils patch already applied", flush=True)
 
@@ -149,7 +149,7 @@ def build_modules() -> None:
 
 
 def build_headers():
-    print("\033[96m" + "Preparing for kernel build" + "\033[0m", flush=True)
+    print("\033[96m" + "Preparing for header build" + "\033[0m", flush=True)
     rmdir("headers")  # just in case
     mkdir("headers")
 
@@ -171,7 +171,7 @@ def build_headers():
     bash("chmod +x fastxz")  # make script executable
     modules_start = time.time()
     try:
-        bash("tar -cvI './fastxz' -f ../headers.tar.xz lib/")
+        bash("tar -cvI './fastxz' -f ../headers.tar.xz include/")
     except subprocess.CalledProcessError:
         print("\033[91m" + f"Headers archival failed in: {time.time() - modules_start}" + "\033[0m")
         exit(1)
@@ -188,7 +188,7 @@ if __name__ == "__main__":
     args = process_args()
 
     # get number of cores
-    cores = bash_return("nproc")
+    cores = bash("nproc")
     print(f"Available cores: {cores}", flush=True)
 
     # check if running on ubuntu

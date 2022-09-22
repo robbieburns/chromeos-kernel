@@ -89,7 +89,7 @@ def cpdir(root_src: str, root_dst: str) -> None:  # dst_dir must be a full path,
             print("\033[93m" + f"Failed to copy {root_src} to {root_dst}, using bash" + "\033[0m")
             bash(f"cp -rp {src_as_path.absolute().as_posix()} {dst_as_path.absolute().as_posix()}")
         '''
-        bash(f"cp -rp {root_src}* {root_dst}")
+        bash(f"cp -rp {src_as_path.absolute().as_posix()}/* {dst_as_path.absolute().as_posix()}")
     else:
         print("Source directory does not exist?")
 
@@ -108,10 +108,5 @@ def cpfile(src: str, dst: str) -> None:  # "/etc/resolv.conf", "/mnt/eupnea/etc/
 #######################################################################################
 
 # return the output of a command
-def bash_return(command: str) -> str:
+def bash(command: str) -> str:
     return subprocess.check_output(command, shell=True, text=True).strip()
-
-
-# print output of a command to console
-def bash(command: str) -> None:
-    subprocess.run(command, stderr=sys.stderr, stdout=sys.stdout, shell=True)
