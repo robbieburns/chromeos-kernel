@@ -176,6 +176,7 @@ def build_headers():
         bash("tar -cvI './fastxz' -f ../headers.tar.xz usr/include/")
     except subprocess.CalledProcessError:
         print("\033[91m" + f"Headers archival failed in: {time.time() - modules_start}" + "\033[0m")
+        bash("ls -a")
         exit(1)
     print("\033[96m" + f"Headers archival succeeded in: {time.time() - modules_start}" + "\033[0m", flush=True)
     os.chdir("..")  # go back to chromeos kernel root
