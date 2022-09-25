@@ -2,6 +2,7 @@
 # CHROMEOS COMPILE INSTRUCTIONS: https://www.chromium.org/chromium-os/how-tos-and-troubleshooting/kernel-configuration/
 
 import os
+import sys
 from functions import *
 import argparse
 import time
