@@ -14,6 +14,7 @@ def process_args():
     parser.add_argument(dest="version", type=str, help="Kernel version to build(flag intended for docker containers)")
     parser.add_argument("-i", "--ignore-os", action="store_true", dest="ignore_os", default=False,
                         help="Allow building on non Ubuntu/debian based systems")
+    parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Print more output")
     return parser.parse_args()
 
 
@@ -203,6 +204,10 @@ if __name__ == "__main__":
         print("Manual building is not supported yet. Use the old script for now.", flush=True)
         exit(1)
         # TODO: add version selection for users
+    if args.verbose:
+        print("\033[93m" + "Verbosity increased" + "\033[0m")
+        enable_verbose()  # enable verbose output in functions.py
+
     prepare_host()
     # get kernel_head
     try:
