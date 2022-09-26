@@ -173,7 +173,7 @@ def build_headers():
     bash("chmod +x fastxz")  # make script executable
     modules_start = time.time()
     try:
-        bash("tar -cvI './fastxz' -f ../headers.tar.xz usr/include/")
+        bash("tar -cvI './fastxz' -f ../headers.tar include/")
     except subprocess.CalledProcessError:
         print("\033[91m" + f"Headers archival failed in: {time.time() - modules_start}" + "\033[0m")
         exit(1)
