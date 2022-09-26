@@ -158,7 +158,7 @@ def build_headers():
     print("\033[96m" + "Building headers" + "\033[0m", flush=True)
     modules_start = time.time()
     try:
-        bash(f"make -j{cores} headers_install INSTALL_MOD_PATH=headers")
+        bash(f"make -j{cores} headers_install INSTALL_HDR_PATH=headers")
     except subprocess.CalledProcessError:
         print("\033[91m" + f"Headers build failed in: {time.time() - modules_start}" + "\033[0m")
         exit(1)
@@ -176,7 +176,6 @@ def build_headers():
         bash("tar -cvI './fastxz' -f ../headers.tar.xz usr/include/")
     except subprocess.CalledProcessError:
         print("\033[91m" + f"Headers archival failed in: {time.time() - modules_start}" + "\033[0m")
-        bash("ls -a")
         exit(1)
     print("\033[96m" + f"Headers archival succeeded in: {time.time() - modules_start}" + "\033[0m", flush=True)
     os.chdir("..")  # go back to chromeos kernel root
