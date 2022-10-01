@@ -197,7 +197,7 @@ if __name__ == "__main__":
     print_status(f"Available cpu cores: {cores}")
 
     # check if running on ubuntu and no ignore-os flag
-    if not (path_exists("/usr/bin/apt") and args.ignore_os):
+    if not path_exists("/usr/bin/apt") and not args.ignore_os:
         print_error("This script is made for Ubuntu(container). Use --ignore-os to run on other systems.\n"
                     " Install these packages using your package manager:")
         print_error("netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison "
