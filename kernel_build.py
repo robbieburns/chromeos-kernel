@@ -138,14 +138,9 @@ def build_modules() -> None:
 
     print_status("Compressing kernel modules")
     os.chdir("./mod")
-    # TODO: convert to one liner
-    # create extraction script
-    with open("fastxz", "w") as file:
-        file.write("xz -9 -T0")
-    bash("chmod +x fastxz")  # make script executable
     modules_start = time.time()
     try:
-        bash("tar -cvI './fastxz' -f ../modules.tar.xz lib/")
+        bash("tar -cv -I 'xz -9 -T0' -f ../modules.tar.xz lib/")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
         print_error(f"Modules archival failed in: " + "%.0f" % (time.time() - modules_start) + "seconds")
         exit(1)
@@ -169,14 +164,9 @@ def build_headers():
 
     print_status("Compressing headers")
     os.chdir("./headers")
-    # TODO: convert to one liner
-    # create extraction script
-    with open("fastxz", "w") as file:
-        file.write("xz -9 -T0")
-    bash("chmod +x fastxz")  # make script executable
     headers_start = time.time()
     try:
-        bash("tar -cvI './fastxz' -f ../headers.tar.xz include/")
+        bash("tar -cv -I 'xz -9 -T0' -f ../headers.tar.xz include/")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
         print_error(f"Headers archival failed in: " + "%.0f" % (time.time() - headers_start) + "seconds")
         exit(1)
