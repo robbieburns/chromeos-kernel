@@ -6,7 +6,7 @@ import sys
 from functions import *
 from functions import print_question as print_green
 import argparse
-import time
+from time import perf_counter
 import json
 
 
@@ -112,13 +112,13 @@ def build_kernel() -> None:
     # TODO: add config editing for normal users
 
     print_status(f"Building {args.version} kernel")
-    kernel_start = time.time()
+    kernel_start = perf_counter()
     try:
         bash(f"make -j{cores}")
     except subprocess.CalledProcessError:
-        print_error(f"Kernel build failed in: " + "%.0f" % (time.time() - kernel_start) + "seconds")
+        print_error(f"Kernel build failed in: " + "%.0f" % (perf_counter() - kernel_start) + "seconds")
         exit(1)
-    print_green(f"Kernel build succeeded in: " + "%.0f" % (time.time() - kernel_start) + "seconds")
+    print_green(f"Kernel build succeeded in: " + "%.0f" % (perf_counter() - kernel_start) + "seconds")
 
 
 def build_modules() -> None:
@@ -127,24 +127,24 @@ def build_modules() -> None:
     mkdir("mod")
 
     print_status("Building modules")
-    modules_start = time.time()
+    modules_start = perf_counter()
     try:
         # INSTALL_MOD_STRIP=1 removes debug symbols -> reduces unpacked kernel modules size from 1.2GB to 70MB
         bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod INSTALL_MOD_STRIP=1")
     except subprocess.CalledProcessError:
-        print_error(f"Modules build failed in: " + "%.0f" % (time.time() - modules_start) + "seconds")
+        print_error(f"Modules build failed in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
         exit(1)
-    print_green(f"Modules build succeeded in: " + "%.0f" % (time.time() - modules_start) + "seconds")
+    print_green(f"Modules build succeeded in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
 
     print_status("Compressing kernel modules")
     os.chdir("./mod")
-    modules_start = time.time()
+    modules_start = perf_counter()
     try:
         bash("tar -cv -I 'xz -9 -T0' -f ../modules.tar.xz lib/")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
-        print_error(f"Modules archival failed in: " + "%.0f" % (time.time() - modules_start) + "seconds")
+        print_error(f"Modules archival failed in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
         exit(1)
-    print_green(f"Modules archival succeeded in: " + "%.0f" % (time.time() - modules_start) + "seconds")
+    print_green(f"Modules archival succeeded in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
     os.chdir("..")  # go back to chromeos kernel root
 
 
@@ -154,23 +154,23 @@ def build_headers():
     mkdir("headers")
 
     print_status("Building headers")
-    headers_start = time.time()
+    headers_start = perf_counter()
     try:
         bash(f"make -j{cores} headers_install INSTALL_HDR_PATH=headers")
     except subprocess.CalledProcessError:
-        print_error(f"Headers build failed in: " + "%.0f" % (time.time() - headers_start) + "seconds")
+        print_error(f"Headers build failed in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
         exit(1)
-    print_green(f"Headers build succeeded in: " + "%.0f" % (time.time() - headers_start) + "seconds")
+    print_green(f"Headers build succeeded in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
 
     print_status("Compressing headers")
     os.chdir("./headers")
-    headers_start = time.time()
+    headers_start = perf_counter()
     try:
         bash("tar -cv -I 'xz -9 -T0' -f ../headers.tar.xz include/")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
-        print_error(f"Headers archival failed in: " + "%.0f" % (time.time() - headers_start) + "seconds")
+        print_error(f"Headers archival failed in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
         exit(1)
-    print_green(f"Headers archival succeeded in: " + "%.0f" % (time.time() - headers_start) + "seconds")
+    print_green(f"Headers archival succeeded in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
     os.chdir("..")  # go back to chromeos kernel root
 
 
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     if not os.geteuid() == 0:
         sudo_args = ['sudo', sys.executable] + sys.argv + [os.environ]
         os.execlpe('sudo', *sudo_args)
-    script_start = time.time()
+    script_start = perf_counter()
     args = process_args()
 
     # get number of cores
@@ -254,4 +254,4 @@ if __name__ == "__main__":
     # cp("System.map", f"../{system_map_name}")
     # cpfile(".config", f"../{config_name}")
 
-    print_header(f"Full build completed in: " + "%.0f" % (time.time() - script_start) + "seconds")
+    print_header(f"Full build completed in: " + "%.0f" % (perf_counter() - script_start) + "seconds")
