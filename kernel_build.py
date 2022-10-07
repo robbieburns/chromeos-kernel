@@ -207,6 +207,7 @@ if __name__ == "__main__":
     clone_kernel(read_kernel_head)
 
     # replace boot logo
+    print_status("Replacing boot logo")
     cpfile("../assets/boot_logo.ppm", "drivers/video/logo/logo_linux_clut224.ppm")
 
     apply_patches()
