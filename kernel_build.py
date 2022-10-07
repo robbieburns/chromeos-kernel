@@ -42,13 +42,6 @@ def clone_kernel(kernel_head: str) -> None:
         os.chdir("./chromeos-kernel")
 
 
-# Create boot icon/image
-def create_boot_image():
-    print_status("Creating boot image")
-    # TODO: Boot image
-    print_warning("Not yet implemented")
-
-
 def apply_patches():
     print_status("Applying Eupnea patches")
 
@@ -212,7 +205,10 @@ if __name__ == "__main__":
         exit(1)
 
     clone_kernel(read_kernel_head)
-    create_boot_image()
+
+    # replace boot logo
+    cpfile("../assets/boot_logo.ppm", "drivers/video/logo/logo_linux_clut224.ppm")
+
     apply_patches()
     build_kernel()
     build_modules()
