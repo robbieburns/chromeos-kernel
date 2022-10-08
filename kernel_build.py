@@ -168,7 +168,7 @@ def build_headers():
         print_error(f"Headers archival failed in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
         exit(1)
     print_green(f"Headers archival succeeded in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
-    os.chdir("..")  # go back to chromeos kernel root
+    os.chdir("../../")  # go back to chromeos kernel root
 
 
 if __name__ == "__main__":
