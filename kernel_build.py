@@ -129,6 +129,10 @@ def build_modules() -> None:
         exit(1)
     print_green(f"Modules build succeeded in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
 
+    print_status("Removing broken symlinks")
+    rmfile("mod/lib/modules/build")
+    rmfile("mod/lib/modules/source")
+
     print_status("Compressing kernel modules")
     os.chdir("./mod")
     modules_start = perf_counter()
