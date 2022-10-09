@@ -125,25 +125,25 @@ def build_modules() -> None:
         # INSTALL_MOD_STRIP=1 removes debug symbols -> reduces unpacked kernel modules size from 1.2GB to 70MB
         bash(f"make -j{cores} modules_install INSTALL_MOD_PATH=mod INSTALL_MOD_STRIP=1")
     except subprocess.CalledProcessError:
-        print_error(f"Modules build failed in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
+        print_error(f"Modules build failed in: " + "%.0f" % (perf_counter() - modules_start) + " seconds")
         exit(1)
-    print_green(f"Modules build succeeded in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
+    print_green(f"Modules build succeeded in: " + "%.0f" % (perf_counter() - modules_start) + " seconds")
 
     print_status("Removing broken symlinks")
     # TODO: Use pathlib
-    bash("rm -f mod/lib/modules/*/build")
-    bash("rm -f mod/lib/modules/*/source")
+    bash("rm -f ./mod/lib/modules/*/build")
+    bash("rm -f ./mod/lib/modules/*/source")
 
     print_status("Compressing kernel modules")
-    os.chdir("./mod")
+    os.chdir("./mod/lib/modules")
     modules_start = perf_counter()
     try:
-        bash("tar -cv -I 'xz -9 -T0' -f ../modules.tar.xz lib/")  # fast multicore xtreme compression
+        bash("tar -cv -I 'xz -9 -T0' -f ../../../modules.tar.xz ./")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
-        print_error(f"Modules archival failed in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
+        print_error(f"Modules archival failed in: " + "%.0f" % (perf_counter() - modules_start) + " seconds")
         exit(1)
-    print_green(f"Modules archival succeeded in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
-    os.chdir("..")  # go back to chromeos kernel root
+    print_green(f"Modules archival succeeded in: " + "%.0f" % (perf_counter() - modules_start) + " seconds")
+    os.chdir("../../../")  # go back to chromeos kernel root
 
 
 def build_headers():
@@ -156,9 +156,9 @@ def build_headers():
     try:
         bash(f"make -j{cores} headers_install INSTALL_HDR_PATH=headers")
     except subprocess.CalledProcessError:
-        print_error(f"Headers build failed in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
+        print_error(f"Headers build failed in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
         exit(1)
-    print_green(f"Headers build succeeded in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
+    print_green(f"Headers build succeeded in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
 
     print_status("Compressing headers")
     os.chdir("./headers/include")
@@ -166,9 +166,9 @@ def build_headers():
     try:
         bash("tar -cv -I 'xz -9 -T0' -f ../../headers.tar.xz ./")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
-        print_error(f"Headers archival failed in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
+        print_error(f"Headers archival failed in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
         exit(1)
-    print_green(f"Headers archival succeeded in: " + "%.0f" % (perf_counter() - headers_start) + "seconds")
+    print_green(f"Headers archival succeeded in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
     os.chdir("../../")  # go back to chromeos kernel root
 
 
