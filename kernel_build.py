@@ -130,8 +130,9 @@ def build_modules() -> None:
     print_green(f"Modules build succeeded in: " + "%.0f" % (perf_counter() - modules_start) + "seconds")
 
     print_status("Removing broken symlinks")
-    rmfile("mod/lib/modules/*/build")
-    rmfile("mod/lib/modules/*/source")
+    # TODO: Use pathlib
+    bash("rm -f mod/lib/modules/*/build")
+    bash("rm -f mod/lib/modules/*/source")
 
     print_status("Compressing kernel modules")
     os.chdir("./mod")
