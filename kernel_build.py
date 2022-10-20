@@ -19,15 +19,6 @@ def process_args():
     parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Print more output")
     return parser.parse_args()
 
-
-def prepare_host() -> None:
-    print_status("Preparing host system")
-    bash("apt update -y")
-    bash("apt install -y netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev "
-         "bison binutils")
-    # TODO: add cleaning after previous builds for user builds
-
-
 def clone_kernel(kernel_head: str) -> None:
     print_status(f"Cloning kernel: {kernel_head}")
     if args.version == "alt-chromeos-5.10":
@@ -200,7 +191,6 @@ if __name__ == "__main__":
         print_warning("Verbosity increased")
         set_verbose(args.verbose)  # enable verbose output in functions.py
 
-    prepare_host()
     # get kernel_head
     try:
         with open("kernel_versions.json", "r") as json_file:
