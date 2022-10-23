@@ -152,7 +152,7 @@ def build_headers():
     mkdir("headers")
     bash("ar x ../linux-headers*.deb")
     bash("tar xpf ./data.tar.xz -C ./ --checkpoint=.10000")
-    bash("cp -r ./usr/src/linux-headers* ./headers")
+    bash("cp -r ./usr/src/linux-headers*/* ./headers")
 
     os.chdir("./headers")
     headers_start = perf_counter()
