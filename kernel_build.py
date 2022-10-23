@@ -227,9 +227,9 @@ if __name__ == "__main__":
             # system_map_name = "System-exp.map"
             # config_name = "kernel-exp.config"
         case "chromeos-5.10":
-            bzImage_name = "bzImage"
-            modules_name = "modules.tar.xz"
-            headers_name = "headers.tar.xz"
+            bzImage_name = "bzImage-stable"
+            modules_name = "modules-stable.tar.xz"
+            headers_name = "headers-stable.tar.xz"
             #  system_map_name = "System.map"
             # config_name = "kernel.config"
         case _:
