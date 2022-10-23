@@ -40,9 +40,9 @@ jobs:
           name: kernel-stable
           retention-days: 1
           path: |
-            bzImage
-            modules.tar.xz
-            headers.tar.xz
+            bzImage-stable
+            modules-stable.tar.xz
+            headers-stable.tar.xz
 
   build-alt:
     runs-on: ubuntu-latest
