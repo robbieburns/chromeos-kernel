@@ -157,7 +157,7 @@ def build_headers():
     os.chdir("./headers")
     headers_start = perf_counter()
     try:
-        bash("tar -cv -I 'xz -9 -T0' -f ../../headers.tar.xz ./")  # fast multicore xtreme compression
+        bash("tar -cv -I 'xz -9 -T0' -f ../headers.tar.xz ./")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
         print_error(f"Headers archival failed in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
         exit(1)
