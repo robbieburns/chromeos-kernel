@@ -19,6 +19,7 @@ def process_args():
     parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Print more output")
     return parser.parse_args()
 
+
 def clone_kernel(kernel_head: str) -> None:
     print_status(f"Cloning kernel: {kernel_head}")
     if args.version == "alt-chromeos-5.10":
@@ -151,7 +152,7 @@ def build_headers():
     mkdir("headers")
     bash("ar x ../linux-headers*.deb")
     bash("tar xpf ./data.tar.xz -C ./ --checkpoint=.10000")
-    cpdir("./usr/src/linux-headers*", "./headers")
+    bash("cp -r ./usr/src/linux-headers* ./headers")
 
     os.chdir("./headers")
     headers_start = perf_counter()
