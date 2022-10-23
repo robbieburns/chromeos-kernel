@@ -138,21 +138,22 @@ def build_modules() -> None:
 
 
 def build_headers():
-    print_status("Preparing for header build")
-    rmdir("headers")  # just in case
-    mkdir("headers")
-
     print_status("Building headers")
     headers_start = perf_counter()
     try:
-        bash(f"make -j{cores} headers_install INSTALL_HDR_PATH=headers")
+        bash("make-kpkg --rootcmd fakeroot kernel_headers")
     except subprocess.CalledProcessError:
         print_error(f"Headers build failed in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
         exit(1)
     print_green(f"Headers build succeeded in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
 
-    print_status("Compressing headers")
-    os.chdir("./headers/include")
+    print_status("Extracting headers .deb")
+    mkdir("headers")
+    bash("ar x ../linux-headers*.deb")
+    bash("tar xpf ./data.tar.xz -C ./ --checkpoint=.10000")
+    cpdir("./usr/src/linux-headers*", "./headers")
+
+    os.chdir("./headers")
     headers_start = perf_counter()
     try:
         bash("tar -cv -I 'xz -9 -T0' -f ../../headers.tar.xz ./")  # fast multicore xtreme compression
