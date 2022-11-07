@@ -143,13 +143,89 @@ def build_headers():
     # Modified archlinux PKGBUILD
     # Source: https://github.com/archlinux/svntogit-packages/blob/packages/linux/trunk/PKGBUILD#L94
     headers_start = perf_counter()
+
+    # Make directories
     mkdir("headers")
-    headers_full_path = os.getcwd() + "/headers"
-    cpfile("./.config", "./headers")
-    cpfile("./Makefile", "./headers")
-    cpfile("./Module.symvers", "./headers")
-    cpfile("./System.map", "./headers")
-    cpfile("./vmlinux", "./headers")
+    mkdir("headers/kernel")
+    mkdir("headers/arch/x86", create_parents=True)
+    mkdir("headers/drivers/md", create_parents=True)
+    mkdir("headers/drivers/media/usb/dvb-usb", create_parents=True)
+    mkdir("headers/drivers/media/dvb-frontends")
+    mkdir("headers/drivers/media/tuners")
+    mkdir("headers/drivers/media/i2c")
+    mkdir("headers/drivers/iio/common/hid-sensors", create_parents=True)
+    mkdir("headers/net/mac80211", create_parents=True)
+
+    # Copy files
+    cpfile("./.config", "./headers/.config")
+    cpfile("./Module.symvers", "./headers/Module.symvers")
+    cpfile("./System.map", "./headers/System.map")
+    cpfile("./vmlinux", "./headers/vmlinux")
+    cpfile("./Makefile", "./headers/Makefile")
+    bash("chmod 644 ./headers/*")
+
+    cpfile("./Makefile", "./headers/kernel/Makefile")
+    bash("chmod 644 ./headers/kernel/Makefile")
+
+    cpfile("./arch/x86/Makefile", "./headers/arch/x86/Makefile")
+    bash("chmod 644 ./headers/arch/x86/Makefile")
+
+    cpfile("./tools/objtool/objtool", "./headers/scripts/objtool")
+
+    cpfile("./arch/x86/kernel/asm-offsets.s", "./headers/arch/x86/kernel/asm-offsets.s")
+    bash("chmod 644 ./headers/arch/x86/kernel/asm-offsets.s")
+
+    cpfile("./drivers/media/i2c/msp3400-driver.h", "./headers/drivers/media/i2c/msp3400-driver.h")
+    bash("chmod 644 ./headers/drivers/media/i2c/msp3400-driver.h")
+
+    for file in os.listdir("./drivers/md"):
+        if file.endswith(".h"):
+            cpfile(f"./drivers/md/{file}", f"./headers/drivers/md/{file}")
+            bash(f"chmod 644 ./headers/drivers/md/{file}")
+
+    for file in os.listdir("./net/mac80211"):
+        if file.endswith(".h"):
+            cpfile(f"./net/mac80211/{file}", f"./headers/net/mac80211/{file}")
+            bash(f"chmod 644 ./headers/drivers/md/{file}")
+
+    for file in os.listdir("./drivers/media/usb/dvb-usb"):
+        if file.endswith(".h"):
+            cpfile(f"./drivers/media/usb/dvb-usb/{file}", f"./headers/drivers/media/usb/dvb-usb/{file}")
+            bash(f"chmod 644 ./headers/drivers/media/usb/dvb-usb/{file}")
+
+    for file in os.listdir("./drivers/media/dvb-frontends"):
+        if file.endswith(".h"):
+            cpfile(f"./drivers/media/dvb-frontends/{file}", f"./headers/drivers/media/dvb-frontends/{file}")
+            bash(f"chmod 644 ./headers/drivers/media/dvb-frontends/{file}")
+
+    for file in os.listdir("./drivers/media/tuners"):
+        if file.endswith(".h"):
+            cpfile(f"./drivers/media/tuners/{file}", f"./headers/drivers/media/tuners/{file}")
+            bash(f"chmod 644 ./headers/drivers/media/tuners/{file}")
+
+    for file in os.listdir("./drivers/iio/common/hid-sensors"):
+        if file.endswith(".h"):
+            cpfile(f"./drivers/iio/common/hid-sensors/{file}", f"./headers/drivers/iio/common/hid-sensors/{file}")
+            bash(f"chmod 644 ./headers/drivers/iio/common/hid-sensors/{file}")
+
+    # Copy directories
+    cpdir("./scripts", "./headers/scripts")
+    cpdir("./include", "./headers/include")
+    cpdir("./arch/x86/include", "./headers/arch/x86/include")
+
+    # Recursively copy all kconfig files
+    bash('find . -name "Kconfig*" -exec install -Dm644 {} "' + os.getcwd() + '/{}" \;')
+
+    # Remove unnecessary architectures
+    for directory in os.listdir("./headers/arch"):
+        if os.path.isdir(directory) and directory != "x86":
+            rmdir(directory)
+
+    # Remove docs
+    rmdir("./headers/Documentation")
+
+    # Delete broken symlinks
+    bash("find -L ./ -type l -printf 'Removing %P\n' -delete")
 
     os.chdir("./headers")
     try:
