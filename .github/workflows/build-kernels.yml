@@ -32,7 +32,7 @@ jobs:
           python-version: '3.10'
           
       - name: Building the stable Kernel
-        run: python kernel_build.py chromeos-5.10 -v
+        run: python kernel_build.py chromeos-5.10
 
       - name: Uploading as artifact
         uses: actions/upload-artifact@v2
@@ -68,7 +68,7 @@ jobs:
           python-version: '3.10'
 
       - name: Building the alt kernel
-        run: python kernel_build.py alt-chromeos-5.10 -v
+        run: python kernel_build.py alt-chromeos-5.10
 
       - name: Uploading as artifact
         uses: actions/upload-artifact@v2
@@ -104,7 +104,7 @@ jobs:
           python-version: '3.10'
 
       - name: Building the experimental kernel
-        run: python kernel_build.py chromeos-5.15 -v
+        run: python kernel_build.py chromeos-5.15
 
       - name: Uploading as artifact
         uses: actions/upload-artifact@v2

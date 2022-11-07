@@ -16,7 +16,6 @@ def process_args():
     parser.add_argument(dest="version", type=str, help="Kernel version to build(flag intended for docker containers)")
     parser.add_argument("-i", "--ignore-os", action="store_true", dest="ignore_os", default=False,
                         help="Allow building on non Ubuntu/debian based systems")
-    parser.add_argument("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Print more output")
     return parser.parse_args()
 
 
@@ -184,11 +183,6 @@ if __name__ == "__main__":
         print_error("netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison "
                     "cgpt vboot-kernel-utils")
         exit(1)
-    if args.version == "":
-        print_green("Which kernel version would you like to use? ")
-        print_error("Manual building is not supported yet. Use the old script for now.")
-        exit(1)
-        # TODO: add version selection for users
     if args.verbose:
         print_warning("Verbosity increased")
         set_verbose(args.verbose)  # enable verbose output in functions.py
@@ -199,6 +193,10 @@ if __name__ == "__main__":
             read_kernel_head = json.load(json_file)[args.version]
     except KeyError:
         print_error("Kernel version not available.")
+        print_status("Available versions:")
+        with open("kernel_versions.json", "r") as json_file:
+            for key in json.load(json_file):
+                print(key)
         exit(1)
 
     clone_kernel(read_kernel_head)
