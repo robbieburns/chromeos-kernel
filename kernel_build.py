@@ -148,7 +148,7 @@ def build_headers():
     mkdir("headers")
     mkdir("headers/tools/objtool", create_parents=True)
     mkdir("headers/kernel")
-    mkdir("headers/arch/x86", create_parents=True)
+    mkdir("headers/arch/x86/kernel", create_parents=True)
     mkdir("headers/drivers/md", create_parents=True)
     mkdir("headers/drivers/media/usb/dvb-usb", create_parents=True)
     mkdir("headers/drivers/media/dvb-frontends")
