@@ -138,23 +138,20 @@ def build_modules() -> None:
 
 
 def build_headers():
-    print_status("Building headers")
+    print_status("Packing headers")
+    # Pack headers
+    # Modified archlinux PKGBUILD
+    # Source: https://github.com/archlinux/svntogit-packages/blob/packages/linux/trunk/PKGBUILD#L94
     headers_start = perf_counter()
-    try:
-        bash("make-kpkg --rootcmd fakeroot kernel_headers")
-    except subprocess.CalledProcessError:
-        print_error(f"Headers build failed in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
-        exit(1)
-    print_green(f"Headers build succeeded in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
-
-    print_status("Extracting headers .deb")
     mkdir("headers")
-    bash("ar x ../linux-headers*.deb")
-    bash("tar xpf ./data.tar.xz -C ./ --checkpoint=.10000")
-    bash("cp -r ./usr/src/linux-headers*/* ./headers")
+    headers_full_path = os.getcwd() + "/headers"
+    cpfile("./.config", "./headers")
+    cpfile("./Makefile", "./headers")
+    cpfile("./Module.symvers", "./headers")
+    cpfile("./System.map", "./headers")
+    cpfile("./vmlinux", "./headers")
 
     os.chdir("./headers")
-    headers_start = perf_counter()
     try:
         bash("tar -cv -I 'xz -9 -T0' -f ../headers.tar.xz ./")  # fast multicore xtreme compression
     except subprocess.CalledProcessError:
