@@ -146,6 +146,7 @@ def build_headers():
 
     # Make directories
     mkdir("headers")
+    mkdir("headers/tools/objtool")
     mkdir("headers/kernel")
     mkdir("headers/arch/x86", create_parents=True)
     mkdir("headers/drivers/md", create_parents=True)
@@ -170,7 +171,7 @@ def build_headers():
     cpfile("./arch/x86/Makefile", "./headers/arch/x86/Makefile")
     bash("chmod 644 ./headers/arch/x86/Makefile")
 
-    cpfile("./tools/objtool/objtool", "./headers/scripts/objtool")
+    cpfile("./tools/objtool/objtool", "./headers/tools/objtool/objtool")
 
     cpfile("./arch/x86/kernel/asm-offsets.s", "./headers/arch/x86/kernel/asm-offsets.s")
     bash("chmod 644 ./headers/arch/x86/kernel/asm-offsets.s")
