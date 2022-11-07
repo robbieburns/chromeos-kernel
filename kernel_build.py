@@ -146,7 +146,7 @@ def build_headers():
 
     # Make directories
     mkdir("headers")
-    mkdir("headers/tools/objtool")
+    mkdir("headers/tools/objtool", create_parents=True)
     mkdir("headers/kernel")
     mkdir("headers/arch/x86", create_parents=True)
     mkdir("headers/drivers/md", create_parents=True)
