@@ -187,7 +187,7 @@ def build_headers():
     for file in os.listdir("./net/mac80211"):
         if file.endswith(".h"):
             cpfile(f"./net/mac80211/{file}", f"./headers/net/mac80211/{file}")
-            bash(f"chmod 644 ./headers/drivers/md/{file}")
+            bash(f"chmod 644 ./headers/net/mac80211/{file}")
 
     for file in os.listdir("./drivers/media/usb/dvb-usb"):
         if file.endswith(".h"):
