@@ -180,9 +180,8 @@ if __name__ == "__main__":
         print_error("netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison "
                     "cgpt vboot-kernel-utils")
         exit(1)
-    if args.verbose:
-        print_warning("Verbosity increased")
-        set_verbose(args.verbose)  # enable verbose output in functions.py
+
+    set_verbose(True)  # enable verbose output in functions.py
 
     # get kernel_head
     try:
