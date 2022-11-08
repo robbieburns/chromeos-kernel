@@ -145,7 +145,6 @@ def build_headers():
     headers_start = perf_counter()
 
     # Make directories
-    mkdir("headers")
     mkdir("headers/tools/objtool", create_parents=True)
     mkdir("headers/kernel")
     mkdir("headers/arch/x86/kernel", create_parents=True)
@@ -161,7 +160,7 @@ def build_headers():
     cpfile("./.config", "./headers/.config")
     cpfile("./Module.symvers", "./headers/Module.symvers")
     cpfile("./System.map", "./headers/System.map")
-    cpfile("./vmlinux", "./headers/vmlinux")
+    # cpfile("./vmlinux", "./headers/vmlinux")
     cpfile("./Makefile", "./headers/Makefile")
     bash("chmod 644 ./headers/*")
 
@@ -215,7 +214,9 @@ def build_headers():
     cpdir("./arch/x86/include", "./headers/arch/x86/include")
 
     # Recursively copy all kconfig files
-    bash('find . -name "Kconfig*" -exec install -Dm644 {} "' + os.getcwd() + '/headers/{}" \;')
+    bash('find . -name "Kconfig*" -exec install -Dm644 {} ./headers/{} \;')
+    # TODO: fix recursive copy of Kconfig files
+    rmdir("./headers/headers")  # remove recursive copy of headers
 
     # Remove unnecessary architectures
     for directory in os.listdir("./headers/arch"):
@@ -226,10 +227,10 @@ def build_headers():
     rmdir("./headers/Documentation")
 
     # Delete broken symlinks
-    bash("find -L " + os.getcwd() + "/headers -type l -printf 'Removing %P\n' -delete")
+    bash("find -L ./headers -type l -printf 'Removing %P\n' -delete")
 
     # Strip all files in headers
-    bash("find " + os.getcwd() + "/headers -type f -exec strip -v {} \;")
+    bash("find ./headers -type f -exec strip -v {} \;")
 
     os.chdir("./headers")
     try:
