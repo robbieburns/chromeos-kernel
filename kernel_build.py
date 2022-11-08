@@ -228,6 +228,9 @@ def build_headers():
     # Delete broken symlinks
     bash("find -L " + os.getcwd() + "/headers -type l -printf 'Removing %P\n' -delete")
 
+    # Strip all files in headers
+    bash("find " + os.getcwd() + "/headers -type f -exec strip -v {} \;")
+
     os.chdir("./headers")
     try:
         bash("tar -cv -I 'xz -9 -T0' -f ../headers.tar.xz ./")  # fast multicore xtreme compression
