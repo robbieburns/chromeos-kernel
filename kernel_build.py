@@ -226,7 +226,7 @@ def build_headers():
     rmdir("./headers/Documentation")
 
     # Delete broken symlinks
-    bash("find -L ./ -type l -printf 'Removing %P\n' -delete")
+    bash("find -L " + os.getcwd() + "/headers -type l -printf 'Removing %P\n' -delete")
 
     os.chdir("./headers")
     try:
