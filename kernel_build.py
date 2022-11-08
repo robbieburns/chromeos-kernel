@@ -215,7 +215,7 @@ def build_headers():
     cpdir("./arch/x86/include", "./headers/arch/x86/include")
 
     # Recursively copy all kconfig files
-    bash('find . -name "Kconfig*" -exec install -Dm644 {} "' + os.getcwd() + '/{}" \;')
+    bash('find . -name "Kconfig*" -exec install -Dm644 {} "' + os.getcwd() + '/headers/{}" \;')
 
     # Remove unnecessary architectures
     for directory in os.listdir("./headers/arch"):
