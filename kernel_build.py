@@ -171,6 +171,7 @@ def build_headers():
     bash("chmod 644 ./headers/arch/x86/Makefile")
 
     cpfile("./tools/objtool/objtool", "./headers/tools/objtool/objtool")
+    bash("chmod 644 ./headers/tools/objtool/objtool")
 
     cpfile("./arch/x86/kernel/asm-offsets.s", "./headers/arch/x86/kernel/asm-offsets.s")
     bash("chmod 644 ./headers/arch/x86/kernel/asm-offsets.s")
