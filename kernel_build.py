@@ -81,14 +81,14 @@ def build_kernel() -> None:
         file.write("")
 
     # copy config file from GitHub
-    try:
-        rmfile(".config")  # just in case
-    except FileNotFoundError:
-        pass
-    if args.version == "alt-chromeos-5.10":
-        cpfile("../kernel-alt.conf", "./.config")
-    else:
-        cpfile("../kernel-stable.conf", "./.config")
+    rmfile(".config")  # just in case
+    match args.version:
+        case "alt-chromeos-5.10":
+            cpfile("../kernel-alt.conf", "./.config")
+        case "chromeos-5.10":
+            cpfile("../kernel-stable.conf", "./.config")
+        case "chromeos-5.15":
+            cpfile("../kernel-exp.conf", "./.config")
 
     # make config with default selections
     print_status("Making config with default options")
