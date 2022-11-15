@@ -281,7 +281,7 @@ if __name__ == "__main__":
 
     # replace boot logo
     print_status("Replacing boot logo")
-    cpfile("../assets/boot_logo.ppm", "drivers/video/logo/logo_linux_clut224.ppm")
+    cpfile("../assets/depthboot_boot_logo.ppm", "drivers/video/logo/logo_linux_clut224.ppm")
 
     apply_patches()
     build_kernel()
