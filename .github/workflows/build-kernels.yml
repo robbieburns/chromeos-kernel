@@ -136,14 +136,6 @@ jobs:
       - name: Generating release tag and setting prerelease + name
         id: tag
         run: |
-          if echo $(git log -1 --pretty=format:"%s") | grep -c "stable"
-          then
-            echo "::set-output name=release_tag::$(date +"%Y.%m.%d_%H-%M")"
-            echo "::set-output name=release_type::false"
-          else
-            echo "::set-output name=release_tag::dev-build" 
-            echo "::set-output name=release_type::true"
-          fi
           echo "::set-output name=commit_message::$(git log -1 --pretty=format:"%s")"
 
       - name: creating tmp folder
@@ -157,9 +149,9 @@ jobs:
       - name: Publishing new release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.tag.outputs.release_tag }}
+          tag_name: dev-build
           name: Kernel build - ${{ steps.tag.outputs.commit_message }}
-          prerelease: ${{ steps.tag.outputs.release_type }}
+          prerelease: true
           body: |
             Triggered by ${{ github.sha }} at ${{ github.event.repository.updated_at }}
           files: |
