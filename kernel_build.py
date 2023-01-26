@@ -223,8 +223,8 @@ if __name__ == "__main__":
 
     # copy files up one dir for artifact upload
     print_status("Copying files to actual root")
-    cpfile("arch/x86/boot/bzImage", "../bzImage-stable")
-    cpfile("modules.tar.xz", "../modules-stable.tar.xz")
-    cpfile("headers.tar.xz", "../headers-stable.tar.xz")
+    cpfile("arch/x86/boot/bzImage", "../bzImage")
+    cpfile("modules.tar.xz", "../modules.tar.xz")
+    cpfile("headers.tar.xz", "../headers.tar.xz")
 
     print_header("Full build completed in: " + "%.0f" % (perf_counter() - script_start) + "seconds")

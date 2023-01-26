@@ -8,7 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-stable:
+  build-chromeos:
     runs-on: ubuntu-latest
     steps:
       - name: Maximizing build space
@@ -26,23 +26,23 @@ jobs:
       - name: Installing dependencies
         run: sudo apt-get update && sudo apt-get install build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison binutils
 
-      - name: Building the stable Kernel
+      - name: Building ChromeOS Kernel
         run: python kernel_build.py
 
-      - name: Uploading as artifact
+      - name: Uploading kernel files as artifact
         uses: actions/upload-artifact@v2
         with:
           name: kernel-stable
           retention-days: 1
           path: |
-            bzImage-stable
-            modules-stable.tar.xz
-            headers-stable.tar.xz
+            bzImage
+            modules.tar.xz
+            headers.tar.xz
 
 
   create-release:
     runs-on: ubuntu-latest
-    needs: [ build-stable ]
+    needs: [ build-chromeos ]
     steps:
       - name: Checking out repository code
         uses: actions/checkout@v3
