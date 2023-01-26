@@ -1,9 +1,9 @@
 # FILE SOURCE: https://github.com/apacelus/python-os-functions
-from pathlib import Path
-from time import sleep
-from threading import Thread
-from urllib.request import urlopen, urlretrieve
 import subprocess
+from pathlib import Path
+from threading import Thread
+from time import sleep
+from urllib.request import urlopen, urlretrieve
 
 verbose = False
 disable_download = False

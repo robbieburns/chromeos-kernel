@@ -1,4 +1,4 @@
-name: Build kernels
+name: Build chromeos kernel
 on:
   push:
     branches: [ "main" ]
@@ -26,11 +26,6 @@ jobs:
       - name: Installing dependencies
         run: sudo apt-get update && sudo apt-get install build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison binutils
 
-      - name: Installing python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
       - name: Building the stable Kernel
         run: python kernel_build.py chromeos-5.10
 
@@ -44,81 +39,10 @@ jobs:
             modules-stable.tar.xz
             headers-stable.tar.xz
 
-  build-alt:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Maximizing build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 5120
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-
-      - name: Checking out repository code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-
-      - name: Installing dependencies
-        run: sudo apt-get update && sudo apt-get install build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison binutils
-
-      - name: Installing python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Building the alt kernel
-        run: python kernel_build.py alt-chromeos-5.10
-
-      - name: Uploading as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: kernel-alt
-          retention-days: 1
-          path: |
-            bzImage-alt
-            modules-alt.tar.xz
-            headers-alt.tar.xz
-
-  build-exp:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Maximizing build space
-        uses: easimon/maximize-build-space@master
-        with:
-          root-reserve-mb: 5120
-          swap-size-mb: 1024
-          remove-dotnet: 'true'
-
-      - name: Checking out repository code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
-
-      - name: Installing dependencies
-        run: sudo apt-get update && sudo apt-get install build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison binutils
-
-      - name: Installing python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Building the experimental kernel
-        run: python kernel_build.py chromeos-5.15
-
-      - name: Uploading as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: kernel-exp
-          retention-days: 1
-          path: |
-            bzImage-exp
-            modules-exp.tar.xz
-            headers-exp.tar.xz
 
   create-release:
     runs-on: ubuntu-latest
-    needs: [ build-stable, build-alt, build-exp ]
+    needs: [ build-stable ]
     steps:
       - name: Checking out repository code
         uses: actions/checkout@v3
