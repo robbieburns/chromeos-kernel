@@ -34,8 +34,7 @@ def build_kernel() -> None:
     with open(".gitignore", "a") as file:
         file.write("mod")
     # create .scmversion
-    with open(".scmversion", "w") as file:
-        file.write("")
+    open(".scmversion", "w").close()
 
     rmfile(".config")  # delete old config
     # copy config file from repo root
@@ -85,7 +84,7 @@ def build_modules() -> None:
 
 def build_headers():
     print_status("Packing headers")
-    # Pack headers
+
     # Modified archlinux PKGBUILD
     # Source: https://github.com/archlinux/svntogit-packages/blob/packages/linux/trunk/PKGBUILD#L94
     headers_start = perf_counter()
@@ -179,14 +178,18 @@ def build_headers():
     # Strip all files in headers
     bash("find ./headers -type f -exec strip -v {} \;")
 
-    os.chdir("./headers")
+    # Get kernel version
+    kernel_version = bash("file arch/x86/boot/bzImage").strip().split(" ")[8].strip()
+
+    os.rename("./headers", f"./linux-headers-{kernel_version}")
+
     try:
-        bash("tar -cv -I 'xz -9 -T0' -f ../headers.tar.xz ./")  # fast multicore xtreme compression
+        # fast multicore xtreme compression
+        bash(f"tar -cv -I 'xz -9 -T0' -f ./headers.tar.xz ./linux-headers-{kernel_version}/")
     except subprocess.CalledProcessError:
         print_error("Headers archival failed in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
         exit(1)
     print_green("Headers archival succeeded in: " + "%.0f" % (perf_counter() - headers_start) + " seconds")
-    os.chdir("../")  # go back to chromeos kernel root
 
 
 if __name__ == "__main__":
