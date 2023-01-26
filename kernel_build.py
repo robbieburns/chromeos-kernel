@@ -41,7 +41,7 @@ def build_kernel() -> None:
     # copy config file from repo root
     cpfile("../kernel.conf", "./.config")
 
-    print_status(f"Building {args.version} kernel")
+    print_status("Building 5.10 kernel")
     kernel_start = perf_counter()
     try:
         bash(f"make -j{cores}")
@@ -223,10 +223,8 @@ if __name__ == "__main__":
 
     # copy files up one dir for artifact upload
     print_status("Copying files to actual root")
-    cpfile("arch/x86/boot/bzImage", "../bzImage")
-    cpfile("modules.tar.xz", "../modules.tar.xz")
+    cpfile("arch/x86/boot/bzImage", "../bzImage-stable")
+    cpfile("modules.tar.xz", "../modules-stable.tar.xz")
     cpfile("headers.tar.xz", "../headers-stable.tar.xz")
-    # cp("System.map", f"../{system_map_name}")
-    # cpfile(".config", f"../{config_name}")
 
     print_header("Full build completed in: " + "%.0f" % (perf_counter() - script_start) + "seconds")
