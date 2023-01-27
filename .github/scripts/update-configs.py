@@ -32,7 +32,7 @@ if __name__ == "__main__":
     bash("cp ../kernel.conf ./.config")
 
     # Update config
-    bash("cd linux && make olddefconfig")
+    bash("make olddefconfig")
 
     # Copy new config back to eupnea repo
     bash("cp ./.config ../kernel.conf")
