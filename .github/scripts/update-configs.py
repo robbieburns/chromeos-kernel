@@ -26,21 +26,20 @@ if __name__ == "__main__":
     latest_version = stable_branches[-1]
 
     # clone latest branch
-    bash(f"git clone --depth=1 --branch={latest_version} "
-         f"https://chromium.googlesource.com/chromiumos/third_party/kernel")
+    bash(f"git pull --depth=1 origin {latest_version}")
 
     # Copy eupnea config into fresh chromeos kernel repo
-    bash("cp kernel.conf kernel/.config")
+    bash("cp ../kernel.conf ./.config")
 
     # Update config
     bash("cd linux && make olddefconfig")
 
     # Copy new config back to eupnea repo
-    bash("cp kernel/.config kernel.conf")
+    bash("cp ./.config ../kernel.conf")
 
     # Update build script
-    with open("kernel_build.py", "r") as file:
+    with open("../kernel_build.py", "r") as file:
         build_script = file.readlines()
     build_script[11] = f'"branch_name = "{latest_version}"\n'
-    with open("kernel_build.py", "w") as file:
+    with open("../kernel_build.py", "w") as file:
         file.writelines(build_script)
