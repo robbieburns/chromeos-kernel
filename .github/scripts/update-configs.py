@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-import json
 import os
 import subprocess
-from urllib.request import urlopen
 
 
 def bash(command: str) -> str:
@@ -32,13 +30,13 @@ if __name__ == "__main__":
          f"https://chromium.googlesource.com/chromiumos/third_party/kernel")
 
     # Copy eupnea config into fresh chromeos kernel repo
-    bash("cp kernel.conf linux/.config")
+    bash("cp kernel.conf kernel/.config")
 
     # Update config
     bash("cd linux && make olddefconfig")
 
     # Copy new config back to eupnea repo
-    bash("cp linux/.config kernel.conf")
+    bash("cp kernel/.config kernel.conf")
 
     # Update build script
     with open("kernel_build.py", "r") as file:
@@ -46,4 +44,3 @@ if __name__ == "__main__":
     build_script[11] = f'"branch_name = "{latest_version}"\n'
     with open("kernel_build.py", "w") as file:
         file.writelines(build_script)
-
