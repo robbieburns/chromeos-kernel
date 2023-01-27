@@ -40,6 +40,6 @@ if __name__ == "__main__":
     # Update build script
     with open("../kernel_build.py", "r") as file:
         build_script = file.readlines()
-    build_script[11] = f'"branch_name = "{latest_version}"\n'
+    build_script[11] = f'branch_name = "{latest_version}"\n'
     with open("../kernel_build.py", "w") as file:
         file.writelines(build_script)
