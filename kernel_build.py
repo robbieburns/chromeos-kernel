@@ -91,15 +91,20 @@ def build_headers():
 
     # Make directories
     mkdir("headers/tools/objtool", create_parents=True)
+    bash("chmod 755 ./headers/tools")
     mkdir("headers/kernel")
+    bash("chmod 755 ./headers/kernel")
     mkdir("headers/arch/x86/kernel", create_parents=True)
+    bash("chmod 755 ./headers/arch")
     mkdir("headers/drivers/md", create_parents=True)
+    bash("chmod 755 ./headers/drivers")
     mkdir("headers/drivers/media/usb/dvb-usb", create_parents=True)
     mkdir("headers/drivers/media/dvb-frontends")
     mkdir("headers/drivers/media/tuners")
     mkdir("headers/drivers/media/i2c")
     mkdir("headers/drivers/iio/common/hid-sensors", create_parents=True)
     mkdir("headers/net/mac80211", create_parents=True)
+    bash("chmod 755 ./headers/net")
 
     # Copy files
     cpfile("./.config", "./headers/.config")
@@ -167,10 +172,7 @@ def build_headers():
     # Remove unnecessary architectures
     for directory in os.listdir("./headers/arch"):
         if os.path.isdir(directory) and directory != "x86":
-            rmdir(directory)
-
-    # Remove docs
-    rmdir("./headers/Documentation")
+            rmdir(f"./headers/arch/{directory}", keep_dir=False)
 
     # Delete broken symlinks
     bash("find -L ./headers -type l -printf 'Removing %P\n' -delete")
@@ -182,6 +184,7 @@ def build_headers():
     kernel_version = bash("file arch/x86/boot/bzImage").strip().split(" ")[8].strip()
 
     os.rename("./headers", f"./linux-headers-{kernel_version}")
+    rmdir(f"./linux-headers-{kernel_version}/headers", keep_dir=False)
 
     try:
         # fast multicore xtreme compression
@@ -193,11 +196,6 @@ def build_headers():
 
 
 if __name__ == "__main__":
-    # Elevate script to root
-    if os.geteuid() != 0:
-        sudo_args = ['sudo', sys.executable] + sys.argv + [os.environ]
-        os.execlpe('sudo', *sudo_args)
-
     script_start = perf_counter()
     args = process_args()
     set_verbose(True)  # enable verbose output in functions.py
@@ -208,7 +206,7 @@ if __name__ == "__main__":
 
     # check if running on ubuntu and no ignore-os flag
     if not path_exists("/usr/bin/apt") and not args.ignore_os:
-        print_error("This script is made for Ubuntu(container). Use --ignore-os to run on other systems.\n"
+        print_error("This script is made for Ubuntu containers. Use --ignore-os to run on other systems.\n"
                     " Install these packages using your package manager:")
         print_error("netpbm imagemagick git build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison "
                     "cgpt vboot-kernel-utils")
