@@ -91,20 +91,15 @@ def build_headers():
 
     # Make directories
     mkdir("headers/tools/objtool", create_parents=True)
-    bash("chmod 755 ./headers/tools")
     mkdir("headers/kernel")
-    bash("chmod 755 ./headers/kernel")
     mkdir("headers/arch/x86/kernel", create_parents=True)
-    bash("chmod 755 ./headers/arch")
     mkdir("headers/drivers/md", create_parents=True)
-    bash("chmod 755 ./headers/drivers")
     mkdir("headers/drivers/media/usb/dvb-usb", create_parents=True)
     mkdir("headers/drivers/media/dvb-frontends")
     mkdir("headers/drivers/media/tuners")
     mkdir("headers/drivers/media/i2c")
     mkdir("headers/drivers/iio/common/hid-sensors", create_parents=True)
     mkdir("headers/net/mac80211", create_parents=True)
-    bash("chmod 755 ./headers/net")
 
     # Copy files
     cpfile("./.config", "./headers/.config")
@@ -166,7 +161,6 @@ def build_headers():
 
     # Recursively copy all kconfig files
     bash('find . -name "Kconfig*" -exec install -Dm644 {} ./headers/{} \;')
-    # TODO: fix recursive copy of Kconfig files
     rmdir("./headers/headers")  # remove recursive copy of headers
 
     # Remove unnecessary architectures
@@ -176,6 +170,13 @@ def build_headers():
 
     # Delete broken symlinks
     bash("find -L ./headers -type l -printf 'Removing %P\n' -delete")
+
+    # Fix permissions
+    bash("chmod 755 ./headers/drivers")
+    bash("chmod 755 ./headers/net")
+    bash("chmod 755 ./headers/arch")
+    bash("chmod 755 ./headers/kernel")
+    bash("chmod 755 ./headers/tools")
 
     # Strip all files in headers
     bash("find ./headers -type f -exec strip -v {} \;")
