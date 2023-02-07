@@ -1,5 +1,7 @@
 name: Build chromeos kernel
 on:
+  schedule:
+    - cron: "20 0 * * *" # run at the start of every day after functions and config updates
   push:
     branches: [ "main" ]
   workflow_dispatch:
