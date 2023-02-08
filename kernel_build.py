@@ -217,7 +217,7 @@ if __name__ == "__main__":
 
     # add boot logo
     print_status("Adding boot logo")
-    cpfile("../assets/depthboot_boot_logo.ppm", "drivers/video/logo/logo_linux_clut224.ppm")
+    cpfile("../assets/eupnea_boot_logo.ppm", "drivers/video/logo/logo_linux_clut224.ppm")
 
     build_kernel()
     build_modules()
