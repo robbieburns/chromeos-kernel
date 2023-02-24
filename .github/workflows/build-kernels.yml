@@ -32,7 +32,7 @@ jobs:
         run: sudo python3 kernel_build.py
 
       - name: Uploading kernel files as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: kernel-stable
           retention-days: 1
@@ -62,7 +62,8 @@ jobs:
       - name: Generating release tag and setting prerelease + name
         id: tag
         run: |
-          echo "::set-output name=commit_message::$(git log -1 --pretty=format:"%s")"
+          message=$(git log -1 --pretty=format:"%s")
+          echo "commit_message=$message" >> $GITHUB_OUTPUT
 
       - name: creating tmp folder
         run: mkdir /tmp/artifacts
